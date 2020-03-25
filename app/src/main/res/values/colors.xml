@@ -164,4 +164,7 @@
     <color name="mine_bg">#F2F2F2</color>
     <color name="text_color_press">#FF7600</color>
     <color name="text_color_normal">#221C1A</color>
+    <color name="colorLogin">#0980C3</color>
+    <color name="colorLoginButton">#004684</color>
+    <color name="logoScreenBackground">#F7F7F7</color>
 </resources>

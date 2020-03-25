@@ -24,7 +24,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.LoginVi
 
     @Override
     public int getLayoutView() {
-        return R.layout.activity_splash;
+        return R.layout.activity_login;
     }
 
     @Override
