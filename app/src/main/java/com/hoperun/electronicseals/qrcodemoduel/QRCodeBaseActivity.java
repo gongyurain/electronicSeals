@@ -1,4 +1,4 @@
-package com.hoperun.electronicseals.cap;
+package com.hoperun.electronicseals.qrcodemoduel;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -8,23 +8,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import android.view.Gravity;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.hoperun.electronicseals.MainActivity;
-import com.hoperun.electronicseals.R;
-import com.hoperun.electronicseals.view.LoginActivity;
+import com.hoperun.electronicseals.view.activity.LoginActivity;
+import com.hoperun.electronicseals.view.activity.MainActivity;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -33,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * Activity的基类
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class QRCodeBaseActivity extends AppCompatActivity {
 
     MaterialDialog materialDialog;
 
@@ -155,66 +148,66 @@ public class BaseActivity extends AppCompatActivity {
                     }
                 }
             }
-            if (BaseActivity.this.isFinishing()) {
+            if (QRCodeBaseActivity.this.isFinishing()) {
                 return;
             }
             switch (msg.what) {
                 case HANDLER_TOAST:
-                    Toast.makeText(BaseActivity.this, (String) msg.obj, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(QRCodeBaseActivity.this, (String) msg.obj, Toast.LENGTH_SHORT).show();
                     break;
                 case HANDLER_CONFIRM_DIALOG:
-                    materialDialog = new MaterialDialog.Builder(BaseActivity.this)
+                    materialDialog = new MaterialDialog.Builder(QRCodeBaseActivity.this)
                             .content((String) msg.obj)
                             .positiveText("确定")
                             .show();
                     break;
                 case HANDLER_PROGRESS_DIALOG:
-                    materialDialog = new MaterialDialog.Builder(BaseActivity.this)
+                    materialDialog = new MaterialDialog.Builder(QRCodeBaseActivity.this)
                             .content((String) msg.obj)
                             .progress(true, 0)
                             .show();
                     break;
                 case HANDLER_FINISH_DIALOG:
-                    materialDialog = new MaterialDialog.Builder(BaseActivity.this)
+                    materialDialog = new MaterialDialog.Builder(QRCodeBaseActivity.this)
                             .content((String) msg.obj)
                             .positiveText("确定")
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    BaseActivity.this.finish();
+                                    QRCodeBaseActivity.this.finish();
                                 }
                             })
                             .show();
                     break;
                 case HANDLER_INDETERMINATE_PROGRESS_DIALOG:
-                    materialDialog = new MaterialDialog.Builder(BaseActivity.this)
+                    materialDialog = new MaterialDialog.Builder(QRCodeBaseActivity.this)
                             .content((String) msg.obj)
                             .progress(true, 0)
                             .cancelable(false)
                             .show();
                     break;
                 case HANDLER_FINISH_TO_MAIN_DIALOG:
-                    materialDialog = new MaterialDialog.Builder(BaseActivity.this)
+                    materialDialog = new MaterialDialog.Builder(QRCodeBaseActivity.this)
                             .content((String) msg.obj)
                             .positiveText("确定")
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    Intent intent = new Intent(BaseActivity.this, MainActivity.class);
+                                    Intent intent = new Intent(QRCodeBaseActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }
                             })
                             .show();
                     break;
                 case HANDLER_FINISH_TO_LOGIN_DIALOG:
-                    materialDialog = new MaterialDialog.Builder(BaseActivity.this)
+                    materialDialog = new MaterialDialog.Builder(QRCodeBaseActivity.this)
                             .content((String) msg.obj)
                             .positiveText("确定")
                             .cancelable(false)
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
+                                    Intent intent = new Intent(QRCodeBaseActivity.this, LoginActivity.class);
                                     startActivity(intent);
                                 }
                             })
@@ -281,7 +274,7 @@ public class BaseActivity extends AppCompatActivity {
 //                leftImageButton.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
-//                        BaseActivity.this.finish();
+//                        QRCodeBaseActivity.this.finish();
 //                    }
 //                });
 //            }
@@ -292,7 +285,7 @@ public class BaseActivity extends AppCompatActivity {
 //                rightButton.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
-////                    Intent intent = new Intent(BaseActivity.this, SettingActivity.class);
+////                    Intent intent = new Intent(QRCodeBaseActivity.this, SettingActivity.class);
 ////                    intent.putExtra(getResources().getString(R.string.title_name), getResources().getString(R.string.action_settings));
 //                        //                   startActivity(intent);
 //                    }

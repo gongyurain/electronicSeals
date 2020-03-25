@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hoperun.electronicseals.decode;
+package com.hoperun.electronicseals.qrcodemoduel;
 
 import android.app.Activity;
 import android.content.DialogInterface;

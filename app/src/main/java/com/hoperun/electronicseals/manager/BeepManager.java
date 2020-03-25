@@ -28,7 +28,7 @@ import android.util.Log;
 
 
 import com.hoperun.electronicseals.R;
-import com.hoperun.electronicseals.view.CaptureActivity;
+import com.hoperun.electronicseals.view.activity.CaptureActivity;
 
 import java.io.IOException;
 

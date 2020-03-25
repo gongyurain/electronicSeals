@@ -1,4 +1,4 @@
-package com.hoperun.electronicseals.view;
+package com.hoperun.electronicseals.qrcodemoduel;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +21,7 @@ import android.view.View;
 import com.google.zxing.ResultPoint;
 import com.hoperun.electronicseals.R;
 import com.hoperun.electronicseals.manager.CameraManager;
+import com.hoperun.electronicseals.view.activity.CaptureActivity;
 
 
 /**

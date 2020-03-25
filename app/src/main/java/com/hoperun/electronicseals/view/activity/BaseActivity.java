@@ -1,4 +1,4 @@
-package com.hoperun.electronicseals.view;
+package com.hoperun.electronicseals.view.activity;
 
 import android.os.Bundle;
 import android.view.Window;
@@ -21,10 +21,12 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseCo
         setContentView(getLayoutView());
         unBind = ButterKnife.bind(this);
         basePresenter = initPresenter();
-        basePresenter.attachView(this);
+        if (basePresenter != null) {
+            basePresenter.attachView(this);
+        }
         initData();
         initView();
-
+        initListener();
     }
 
     @Override
@@ -43,6 +45,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseCo
         unBind.unbind();
         basePresenter.detchView();
     }
+
+    public abstract void initListener();
 
     public abstract void initData();
 

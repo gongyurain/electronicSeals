@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hoperun.electronicseals.decode;
+package com.hoperun.electronicseals.qrcodemoduel;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -35,8 +35,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.hoperun.electronicseals.R;
 import com.hoperun.electronicseals.manager.CameraManager;
-import com.hoperun.electronicseals.view.CaptureActivity;
-import com.hoperun.electronicseals.view.ViewfinderResultPointCallback;
+import com.hoperun.electronicseals.view.activity.CaptureActivity;
 
 import java.util.Collection;
 import java.util.Vector;

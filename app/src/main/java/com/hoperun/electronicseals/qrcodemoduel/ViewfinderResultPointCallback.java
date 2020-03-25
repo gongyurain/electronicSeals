@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hoperun.electronicseals.view;
+package com.hoperun.electronicseals.qrcodemoduel;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;

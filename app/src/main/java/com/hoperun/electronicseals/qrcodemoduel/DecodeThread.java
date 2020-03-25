@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hoperun.electronicseals.decode;
+package com.hoperun.electronicseals.qrcodemoduel;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -24,7 +24,7 @@ import android.util.Log;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ResultPointCallback;
-import com.hoperun.electronicseals.view.CaptureActivity;
+import com.hoperun.electronicseals.view.activity.CaptureActivity;
 
 import java.util.Collection;
 import java.util.EnumSet;

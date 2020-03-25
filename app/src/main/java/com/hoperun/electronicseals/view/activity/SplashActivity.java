@@ -1,6 +1,5 @@
-package com.hoperun.electronicseals.view;
+package com.hoperun.electronicseals.view.activity;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
@@ -9,8 +8,9 @@ import androidx.annotation.NonNull;
 import com.hoperun.electronicseals.R;
 import com.hoperun.electronicseals.contract.BaseContract;
 import com.hoperun.electronicseals.presenter.SplashPresenter;
+import com.hoperun.electronicseals.view.activity.BaseActivity;
 
-public class SplashActivity extends BaseActivity{
+public class SplashActivity extends BaseActivity {
 
     private Handler handler = new Handler() {
         @Override
@@ -25,6 +25,11 @@ public class SplashActivity extends BaseActivity{
             }
         }
     };
+
+    @Override
+    public void initListener() {
+
+    }
 
     @Override
     public void initData() {

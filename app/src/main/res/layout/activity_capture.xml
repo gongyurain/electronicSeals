@@ -23,7 +23,7 @@
 
     <!-- 扫描窗口 -->
 
-    <com.hoperun.electronicseals.view.ViewFindView
+    <com.hoperun.electronicseals.qrcodemoduel.ViewFindView
         android:id="@+id/viewfinder_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

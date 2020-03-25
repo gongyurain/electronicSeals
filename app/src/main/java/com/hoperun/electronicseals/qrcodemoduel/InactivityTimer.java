@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hoperun.electronicseals.decode;
+package com.hoperun.electronicseals.qrcodemoduel;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

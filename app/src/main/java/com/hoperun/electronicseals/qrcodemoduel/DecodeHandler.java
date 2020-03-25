@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hoperun.electronicseals.decode;
+package com.hoperun.electronicseals.qrcodemoduel;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -32,7 +32,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.hoperun.electronicseals.R;
-import com.hoperun.electronicseals.view.CaptureActivity;
+import com.hoperun.electronicseals.view.activity.CaptureActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Hashtable;

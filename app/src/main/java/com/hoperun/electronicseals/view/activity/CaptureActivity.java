@@ -1,7 +1,7 @@
-package com.hoperun.electronicseals.view;
+package com.hoperun.electronicseals.view.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -26,21 +26,19 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
-import com.hoperun.electronicseals.MainActivity;
 import com.hoperun.electronicseals.R;
-import com.hoperun.electronicseals.cap.BaseActivity;
-import com.hoperun.electronicseals.contract.BaseContract;
-import com.hoperun.electronicseals.decode.CaptureActivityHandler;
-import com.hoperun.electronicseals.decode.DecodeThread;
-import com.hoperun.electronicseals.decode.FinishListener;
-import com.hoperun.electronicseals.decode.InactivityTimer;
+import com.hoperun.electronicseals.qrcodemoduel.CaptureActivityHandler;
+import com.hoperun.electronicseals.qrcodemoduel.DecodeThread;
+import com.hoperun.electronicseals.qrcodemoduel.FinishListener;
+import com.hoperun.electronicseals.qrcodemoduel.InactivityTimer;
 import com.hoperun.electronicseals.manager.BeepManager;
 import com.hoperun.electronicseals.manager.CameraManager;
+import com.hoperun.electronicseals.qrcodemoduel.QRCodeBaseActivity;
+import com.hoperun.electronicseals.qrcodemoduel.ViewFindView;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Vector;
@@ -48,7 +46,7 @@ import java.util.Vector;
 /**
  * 条码二维码扫描功能实现
  */
-public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
+public class CaptureActivity extends QRCodeBaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
 	private static final String TAG = CaptureActivity.class.getSimpleName();
 
 	private boolean hasSurface;
@@ -95,12 +93,13 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 	/**
 	 * 初始化窗口设置
 	 */
+	@SuppressLint("SourceLockedOrientationActivity")
 	private void initSetting() {
 		Window window = getWindow();
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 保持屏幕处于点亮状态
 		// window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); // 全屏
 		requestWindowFeature(Window.FEATURE_NO_TITLE); // 隐藏标题栏
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 竖屏
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); // 竖屏
 	}
 
 	/**
