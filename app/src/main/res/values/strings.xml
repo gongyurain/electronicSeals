@@ -16,4 +16,13 @@
     <string name="msg_default_meta">元数据</string>
     <string name="msg_default_time">时间</string>
     <string name="msg_default_type">类型</string>
+
+
+    <string name="profile_txt_Instructions">使用说明书</string>
+    <string name="profile_txt_problem">常见问题</string>
+    <string name="profile_txt_update">版本更新</string>
+    <string name="profile_txt_support">技术支持</string>
+    <string name="profile_txt_setting">设置</string>
+    <string name="profile_txt_username">ElectronicSeals</string>
+    <string name="profile_txt_userid">账号：admin</string>
 </resources>
