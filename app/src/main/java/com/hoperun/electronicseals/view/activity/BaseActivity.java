@@ -1,10 +1,9 @@
 package com.hoperun.electronicseals.view.activity;
 
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.hoperun.electronicseals.contract.BaseContract;
+import com.hoperun.electronicseals.utils.SharedPreferencesUtil;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import butterknife.ButterKnife;
@@ -24,6 +23,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseCo
         if (basePresenter != null) {
             basePresenter.attachView(this);
         }
+        SharedPreferencesUtil.getInstance(this,"data");
         initData();
         initView();
         initListener();

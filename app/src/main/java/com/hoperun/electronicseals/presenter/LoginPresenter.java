@@ -6,6 +6,12 @@ import com.hoperun.electronicseals.model.LoginModel;
 import java.util.HashMap;
 
 public class LoginPresenter extends LoginContract.LoginPresenter {
+    public static final int SUCCESS = 1;
+
+    public static final int FAILED = 0;
+
+    public static final int NULL = -1;
+
     @Override
     protected LoginContract.LoginModel creatModel() {
         return new LoginModel();

@@ -1,5 +1,6 @@
 package com.hoperun.electronicseals.view.activity;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
@@ -18,9 +19,9 @@ public class SplashActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case 1:
-//                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-//                    startActivity(intent);
-//                    finish();
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                     break;
             }
         }
@@ -33,7 +34,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        handler.sendEmptyMessageAtTime(1, 3000);
+        handler.sendEmptyMessageDelayed(1, 3000);
     }
 
     @Override
@@ -49,5 +50,11 @@ public class SplashActivity extends BaseActivity {
     @Override
     public BaseContract.BasePresenter initPresenter() {
         return new SplashPresenter();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
