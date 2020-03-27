@@ -2,6 +2,7 @@ package com.hoperun.electronicseals.view.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -39,6 +40,7 @@ import com.hoperun.electronicseals.qrcodemoduel.ViewFindView;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Vector;
@@ -335,19 +337,19 @@ public class CaptureActivity extends QRCodeBaseActivity implements SurfaceHolder
 		}
 		//TODO 获取扫描结果
         toast(rawResult.getText());
-//		Intent intent = new Intent();
-////		Bundle bundle = new Bundle();
-////		bundle.putParcelable("bitmap", barcode);
-////		bundle.putString("barcodeFormat", rawResult.getBarcodeFormat()
-////				.toString());
-////		bundle.putString("decodeDate",
-////				formatter.format(new Date(rawResult.getTimestamp())));
-////		bundle.putCharSequence("metadataText", metadataText);
-////		bundle.putString("resultString", rawResult.getText());
-//		intent.setClass(CaptureActivity.this, MainActivity.class);
-//		intent.putExtras(bundle);
-//		startActivity(intent);
-//		CaptureActivity.this.finish();
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();
+		bundle.putParcelable("bitmap", barcode);
+		bundle.putString("barcodeFormat", rawResult.getBarcodeFormat()
+				.toString());
+		bundle.putString("decodeDate",
+				formatter.format(new Date(rawResult.getTimestamp())));
+		bundle.putCharSequence("metadataText", metadataText);
+		bundle.putString("resultString", rawResult.getText());
+		intent.setClass(CaptureActivity.this, ExceptionInfoActivity.class);
+		intent.putExtras(bundle);
+		startActivity(intent);
+		CaptureActivity.this.finish();
 		// handleDecodeInternally(rawResult, barcode);
 
 	}

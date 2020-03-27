@@ -12,6 +12,6 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:layout_marginLeft="10dp"
-        android:text="设备列表"
+        android:text=""
         android:textColor="@color/black"/>
 </LinearLayout>

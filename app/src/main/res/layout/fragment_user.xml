@@ -13,12 +13,9 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0.3dp"
-                android:background="@color/black3" />
 
             <RelativeLayout
                 android:id="@+id/view_user"
@@ -26,26 +23,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/setting_item_selector"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="60dip"
-                    android:layout_height="60dip"
-                    android:src="@mipmap/ic_logo"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
-
-
-                <TextView
-                    android:id="@+id/tvname"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@+id/profile_image"
-                    android:text="@string/profile_txt_username"
-                    android:textSize="18sp" />
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/right" />
+
 
                 <TextView
                     android:id="@+id/tvmsg"
@@ -57,20 +45,23 @@
                     android:text="@string/profile_txt_userid"
                     android:textSize="12sp" />
 
-                <ImageView
+                <TextView
+                    android:id="@+id/tvname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/right" />
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/profile_image"
+                    android:text="@string/profile_txt_username"
+                    android:textSize="18sp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="60dip"
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/ic_logo" />
             </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0.3dp"
-                android:background="@color/black3" />
-
 
             <TextView
                 android:id="@+id/txt_Instructions"
@@ -78,7 +69,6 @@
                 android:layout_marginTop="20dp"
                 android:drawableLeft="@mipmap/icon_me_sm"
                 android:text="@string/profile_txt_Instructions" />
-
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="0.3dp"
@@ -89,40 +79,39 @@
                 style="@style/list_txt_Style"
                 android:drawableLeft="@mipmap/icon_me_problem"
                 android:text="@string/profile_txt_problem" />
-
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="0.3dp"
                 android:background="@color/black3" />
-
             <TextView
                 android:id="@+id/txt_money"
                 style="@style/list_txt_Style"
                 android:drawableLeft="@mipmap/icon_me_update"
                 android:text="@string/profile_txt_update" />
-
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="0.3dp"
                 android:background="@color/black3" />
-
             <TextView
                 android:id="@+id/txt_card"
                 style="@style/list_txt_Style"
                 android:drawableLeft="@mipmap/icon_me_support"
                 android:text="@string/profile_txt_support" />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/black3" />
+            <TextView
+                android:id="@+id/txt_setting"
+                style="@style/list_txt_Style"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@mipmap/icon_me_setting"
+                android:text="@string/profile_txt_setting" />
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="0.3dp"
                 android:background="@color/black3" />
-
-            <TextView
-                android:layout_marginTop="20dp"
-                android:id="@+id/txt_setting"
-                style="@style/list_txt_Style"
-                android:drawableLeft="@mipmap/icon_me_setting"
-                android:text="@string/profile_txt_setting" />
 
             <View
                 android:layout_width="fill_parent"
