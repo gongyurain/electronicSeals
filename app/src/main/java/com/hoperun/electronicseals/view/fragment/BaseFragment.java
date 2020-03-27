@@ -16,6 +16,7 @@ public abstract class BaseFragment extends RxFragment implements BaseContract.Ba
     public BaseContract.BasePresenter basePresenter;
 
     private View rootView;
+
     Unbinder unbinder;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +46,8 @@ public abstract class BaseFragment extends RxFragment implements BaseContract.Ba
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-
+        if (basePresenter != null) {
+            basePresenter.detchView();
+        }
     }
 }

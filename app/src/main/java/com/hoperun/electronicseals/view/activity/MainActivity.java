@@ -35,14 +35,11 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
-                    case R.id.operate_tab:
+                    case R.id.search_tab:
                         changefragment(0);
                         break;
-                    case R.id.search_tab:
-                        changefragment(1);
-                        break;
                     case R.id.user_tab:
-                        changefragment(2);
+                        changefragment(1);
                         break;
                 }
             }
@@ -57,10 +54,10 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initView() {
         fragments = new ArrayList<Fragment>();
-        fragments.add(new OperateFragment());
         fragments.add(new SearchFragment());
         fragments.add(new UserFragment());
         changefragment(0);
+        radioGroup.check(R.id.search_tab);
     }
 
     protected void changefragment(int index) {

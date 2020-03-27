@@ -14,6 +14,7 @@ import com.hoperun.electronicseals.R;
 import com.hoperun.electronicseals.contract.BaseContract;
 import com.hoperun.electronicseals.contract.LoginContract;
 import com.hoperun.electronicseals.presenter.LoginPresenter;
+import com.hoperun.electronicseals.utils.ClickUtils;
 import com.hoperun.electronicseals.utils.SharedPreferencesUtil;
 import com.ljs.lovelytoast.LovelyToast;
 
@@ -121,8 +122,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.LoginVi
 
     @OnClick(R.id.btn_login)
     public void login() {
+        if (ClickUtils.isFastClick()) {
+            return;
+        }
         if (mCheckBox.isChecked()) {
             remPassword();
+        } else {
+            ((LoginPresenter) basePresenter).savePassword("",
+                    "");
+            SharedPreferencesUtil.putData("remember_password",false);
         }
         ((LoginPresenter) basePresenter).loginDo(mName.getText().toString(),
                 mPassword.getText().toString());

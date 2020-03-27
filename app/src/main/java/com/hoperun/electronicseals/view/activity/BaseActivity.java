@@ -43,7 +43,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseCo
     protected void onDestroy() {
         super.onDestroy();
         unBind.unbind();
-        basePresenter.detchView();
+        if (basePresenter != null) {
+            basePresenter.detchView();
+        }
     }
 
     public abstract void initListener();

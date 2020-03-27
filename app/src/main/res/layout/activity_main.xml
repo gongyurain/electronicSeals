@@ -21,17 +21,10 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/operate_tab"
-            style="@style/Custom.TabRadioButton"
-            android:checked="true"
-            android:drawableTop="@drawable/tab_operate_selector"
-            android:text="操作" />
-
-        <RadioButton
             android:id="@+id/search_tab"
             style="@style/Custom.TabRadioButton"
-            android:drawableTop="@drawable/tab_search_selector"
-            android:text="查询" />
+            android:drawableTop="@drawable/tab_operate_selector"
+            android:text="设备列表" />
 
         <RadioButton
             android:id="@+id/user_tab"

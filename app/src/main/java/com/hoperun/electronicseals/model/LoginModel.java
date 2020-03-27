@@ -27,9 +27,6 @@ public class LoginModel implements LoginContract.LoginModel {
 
     @Override
     public int save(String name, String password) {
-        if (name.equals("") || password.equals("")) {
-            return NULL;
-        }
         SharedPreferencesUtil.putData("name", name);
         SharedPreferencesUtil.putData("password", password);
         return SUCCESS;
