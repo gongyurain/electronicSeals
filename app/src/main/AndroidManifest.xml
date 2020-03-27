@@ -23,6 +23,7 @@
         <activity android:name=".view.activity.LoginActivity"/>
         <activity android:name=".view.activity.MainActivity"/>
         <activity android:name=".view.activity.CaptureActivity"/>
+        <activity android:name=".view.activity.ExceptionInfoActivity"/>
     </application>
 
 </manifest>

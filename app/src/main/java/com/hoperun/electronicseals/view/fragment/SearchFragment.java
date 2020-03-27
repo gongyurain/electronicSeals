@@ -11,6 +11,7 @@ import com.hoperun.electronicseals.adapter.ExceptionItemAdapter;
 import com.hoperun.electronicseals.bean.ExceptionItemNode;
 import com.hoperun.electronicseals.contract.BaseContract;
 import com.hoperun.electronicseals.view.activity.CaptureActivity;
+import com.hoperun.electronicseals.view.activity.ExceptionInfoActivity;
 import com.hoperun.electronicseals.wiget.pullableview.PullToRefreshLayout;
 import com.hoperun.electronicseals.wiget.pullableview.PullableListView;
 
@@ -112,10 +113,10 @@ public class SearchFragment extends BaseFragment {
     private AdapterView.OnItemClickListener sealItemClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            ExceptionItemNode node = sealItemNodes.get(position);
-//            Intent intent = new Intent(ExceptionsActivity.this, ExceptionInfoActivity.class);
-//            intent.putExtra("Id", node.getId());
-//            startActivity(intent);
+            ExceptionItemNode node = sealItemNodes.get(position);
+            Intent intent = new Intent(getActivity(), ExceptionInfoActivity.class);
+            intent.putExtra("Id", node.getId());
+            startActivity(intent);
         }
     };
 
