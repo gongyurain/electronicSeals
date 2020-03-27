@@ -168,4 +168,7 @@
     <color name="colorLoginButton">#004684</color>
     <color name="logoScreenBackground">#F7F7F7</color>
     <color name="black3">#ffeeeeee</color>
+    <color name="darkLight">#666666</color>
+    <color name="grayDark">#333333</color>
+    <color name="green_light">#40C182</color>
 </resources>
