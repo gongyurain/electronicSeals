@@ -134,7 +134,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.LoginVi
             if (ContextCompat.checkSelfPermission(LoginActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 //请求权限
-                ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA,},
                         1);
                 //判断是否需要 向用户解释，为什么要申请该权限
                 if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
