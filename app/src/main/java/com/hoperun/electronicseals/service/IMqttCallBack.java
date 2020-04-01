@@ -27,18 +27,4 @@ public interface IMqttCallBack {
      * @param arg0
      */
     void deliveryComplete(IMqttDeliveryToken arg0);
-
-    /**
-     * 连接成功
-     *
-     * @param arg0
-     */
-    void connectSuccess(IMqttToken arg0);
-
-    /**
-     * 连接失败
-     *
-     * @param arg0
-     */
-    void connectFailed(IMqttToken arg0, Throwable arg1);
 }

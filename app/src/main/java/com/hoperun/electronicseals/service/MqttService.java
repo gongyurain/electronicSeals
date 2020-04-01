@@ -1,11 +1,10 @@
 package com.hoperun.electronicseals.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.os.Binder;
 import android.os.IBinder;
+import android.os.ParcelUuid;
 import android.util.Log;
 
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -18,54 +17,81 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class MqttService extends Service {
     private static final String TAG = "MqttService";
 
     private boolean canDoConnect = true;
 
     private MqttClient client;
-
     private MqttConnectOptions conOpt;
-
-    private Context context;
-    private String serverUrl = "";
-    private String userName = "admin";
-    private String passWord = "admin";
-    private String clientId = "";
-    private int timeOut = 10;
-    private int keepAliveInterval = 20;
-    private boolean retained = false;
-    private boolean cleanSession = false;
-    private boolean autoReconnect = true;
     private IMqttCallBack starMQTTCallBack;
+    private ExecutorService sExecutorService= Executors.newFixedThreadPool(4);
 
+    public class MqttBinder extends Binder implements IMqttRequest{
+        @Override
+        public void getDeviceList() {
+            sExecutorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isConnected()) {
+                        return;
+                    }
+                    String content = "00000000002";
+                    System.out.println("Publishing message: " + content);
+                    MqttMessage message = new MqttMessage(content.getBytes());
+                    message.setQos(2);
+                    try {
+                        client.publish(requestDeviceInfoTopic, message);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
 
-    public MqttService(){
+        @Override
+        public void getDeviceInfo(int deviceId) {
+            sExecutorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isConnected()) {
+                        return;
+                    }
+                    String content = "00000000002";
+                    System.out.println("Publishing message: " + content);
+                    MqttMessage message = new MqttMessage(content.getBytes());
+                    message.setQos(2);
+                    try {
+                        client.publish(requestDeviceInfoTopic, message);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
 
-    }
-
-    /**
-     * builder设计模式
-     *
-     * @param builder
-     */
-    private MqttService(Builder builder) {
-        this.context = builder.context;
-        this.serverUrl = builder.serverUrl;
-        this.userName = builder.userName;
-        this.passWord = builder.passWord;
-        this.clientId = builder.clientId;
-        this.timeOut = builder.timeOut;
-        this.keepAliveInterval = builder.keepAliveInterval;
-        this.retained = builder.retained;
-        this.cleanSession = builder.cleanSession;
-        this.autoReconnect = builder.autoReconnect;
-        init();
+        public void setMqttCallBack(IMqttCallBack iMqttCallBack) {
+            starMQTTCallBack = iMqttCallBack;
+        }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new MqttBinder();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sExecutorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                init();
+            }
+        });
     }
 
     @Override
@@ -73,74 +99,6 @@ public class MqttService extends Service {
         return super.onStartCommand(intent, flags, startId);
 
     }
-
-    /**
-     * Builder 构造类
-     */
-    public static final class Builder {
-
-        private Context context;
-        private String serverUrl;
-        private String userName = "admin";
-        private String passWord = "password";
-        private String clientId;
-        private int timeOut = 10;
-        private int keepAliveInterval = 20;
-        private boolean retained = false;
-        private boolean cleanSession = false;
-        private boolean autoReconnect = false;
-
-        public Builder serverUrl(String serverUrl) {
-            this.serverUrl = serverUrl;
-            return this;
-        }
-
-        public Builder userName(String userName) {
-            this.userName = userName;
-            return this;
-        }
-
-        public Builder passWord(String passWord) {
-            this.passWord = passWord;
-            return this;
-        }
-
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
-            return this;
-        }
-
-        public Builder timeOut(int timeOut) {
-            this.timeOut = timeOut;
-            return this;
-        }
-
-        public Builder keepAliveInterval(int keepAliveInterval) {
-            this.keepAliveInterval = keepAliveInterval;
-            return this;
-        }
-
-        public Builder retained(boolean retained) {
-            this.retained = retained;
-            return this;
-        }
-
-        public Builder autoReconnect(boolean autoReconnect) {
-            this.autoReconnect = autoReconnect;
-            return this;
-        }
-
-        public Builder cleanSession(boolean cleanSession) {
-            this.cleanSession = cleanSession;
-            return this;
-        }
-
-        public MqttService bulid(Context context) {
-            this.context = context;
-            return new MqttService(this);
-        }
-    }
-
 
     public void publish(String topic, MqttMessage mqttMessage) {
         try {
@@ -150,11 +108,17 @@ public class MqttService extends Service {
         }
     }
 
+    String reciveDataTopic = "/smartseal/s2c/#";
+    String requestDeviceListTopic = "/smartseal/c2s/devlist";
+    String requestDeviceInfoTopic = "/smartseal/c2s/devinfo";
+    String broker = "tcp://mq.tongxinmao.com:18831";
+    String clientId = "Java testSubscribe";
+
     private void init() {
         MemoryPersistence persistence = new MemoryPersistence();
         // 服务器地址（协议+地址+端口号）
         try {
-            client = new MqttClient(serverUrl, clientId, persistence);
+            client = new MqttClient(broker, clientId, persistence);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -163,9 +127,16 @@ public class MqttService extends Service {
 
         conOpt = new MqttConnectOptions();
         // 清除缓存
-        conOpt.setCleanSession(cleanSession);
+        conOpt.setCleanSession(true);
         // 心跳包发送间隔，单位：秒
-        conOpt.setKeepAliveInterval(keepAliveInterval);
+        conOpt.setKeepAliveInterval(30*1000);
+
+        try {
+            client.connect(conOpt);
+            client.subscribe(reciveDataTopic,2);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -231,28 +202,6 @@ public class MqttService extends Service {
         return false;
     }
 
-    /**
-     *  MQTT是否连接成功
-     */
-    private IMqttActionListener iMqttActionListener = new IMqttActionListener() {
-
-        @Override
-        public void onSuccess(IMqttToken arg0) {
-            Log.i(TAG, "mqtt connect success ");
-            if (starMQTTCallBack != null) {
-                starMQTTCallBack.connectSuccess(arg0);
-            }
-        }
-
-        @Override
-        public void onFailure(IMqttToken arg0, Throwable arg1) {
-            Log.i(TAG, "mqtt connect failed ");
-            if (starMQTTCallBack != null) {
-                starMQTTCallBack.connectFailed(arg0, arg1);
-            }
-        }
-    };
-
     // MQTT监听并且接受消息
     private MqttCallback mqttCallback = new MqttCallback() {
 
@@ -285,20 +234,4 @@ public class MqttService extends Service {
             // 失去连接，重连
         }
     };
-
-    /**
-     * 判断网络是否连接
-     */
-    private boolean isConnectIsNomarl() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-        if (info != null && info.isAvailable()) {
-            String name = info.getTypeName();
-            Log.i(TAG, "MQTT current network name：" + name);
-            return true;
-        } else {
-            Log.i(TAG, "MQTT no network");
-            return false;
-        }
-    }
 }
