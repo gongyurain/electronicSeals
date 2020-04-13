@@ -79,8 +79,7 @@ public class MainActivity extends BaseActivity {
 
                 }
             });
-                mqttBinder.getDeviceInfo(00000000002);
-                mqttBinder.getDeviceInfo(00000000002);
+            mqttBinder.getDeviceList();
         }
 
         @Override
@@ -164,6 +163,11 @@ public class MainActivity extends BaseActivity {
 
 
 
+    public void getDeviceInfo(IMqttCallBack mqttCallBack) {
+        mqttBinder.setMqttCallBack(mqttCallBack);
+        mqttBinder.getDeviceList();
+    }
+
     /**
      * 断开连接
      */
@@ -176,5 +180,11 @@ public class MainActivity extends BaseActivity {
      */
     private void close() {
         mqttService.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbindService(serviceConnection);
+        super.onDestroy();
     }
 }

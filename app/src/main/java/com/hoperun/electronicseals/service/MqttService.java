@@ -4,35 +4,34 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.ParcelUuid;
 import android.util.Log;
 
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MqttService extends Service {
     private static final String TAG = "MqttService";
-
-    private boolean canDoConnect = true;
-
     private MqttClient client;
     private MqttConnectOptions conOpt;
-    private IMqttCallBack starMQTTCallBack;
-    private ExecutorService sExecutorService= Executors.newFixedThreadPool(4);
+    private List<IMqttCallBack> mqttCallBacks = new ArrayList<>();
+    private static int TRHREAD_SIZE = 4;
+    private ExecutorService sExecutorService= Executors.newFixedThreadPool(TRHREAD_SIZE);
 
     public class MqttBinder extends Binder implements IMqttRequest{
         @Override
         public void getDeviceList() {
+            Log.e("gongyu", "Publishing message: " );
             sExecutorService.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -40,11 +39,10 @@ public class MqttService extends Service {
                         return;
                     }
                     String content = "00000000002";
-                    System.out.println("Publishing message: " + content);
                     MqttMessage message = new MqttMessage(content.getBytes());
                     message.setQos(2);
                     try {
-                        client.publish(requestDeviceInfoTopic, message);
+                        client.publish(requestDeviceListTopic, message);
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }
@@ -74,7 +72,10 @@ public class MqttService extends Service {
         }
 
         public void setMqttCallBack(IMqttCallBack iMqttCallBack) {
-            starMQTTCallBack = iMqttCallBack;
+           if (!mqttCallBacks.contains(iMqttCallBack)) {
+               mqttCallBacks.add(iMqttCallBack);
+           }
+           Log.i(TAG, "mqtt callback size");
         }
     }
 
@@ -109,8 +110,8 @@ public class MqttService extends Service {
     }
 
     String reciveDataTopic = "/smartseal/s2c/#";
-    String requestDeviceListTopic = "/smartseal/c2s/devlist";
-    String requestDeviceInfoTopic = "/smartseal/c2s/devinfo";
+    String requestDeviceListTopic = "/smartseal/c2s/eventlist";
+    String requestDeviceInfoTopic = "/smartseal/c2s/eventinfo";
     String broker = "tcp://mq.tongxinmao.com:18831";
     String clientId = "Java testSubscribe";
 
@@ -122,8 +123,28 @@ public class MqttService extends Service {
         } catch (MqttException e) {
             e.printStackTrace();
         }
-        // 设置MQTT监听并且接受消息
-        client.setCallback(mqttCallback);
+
+        client.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.e("gongyu", "Throwable:  " + cause);
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                Log.e("gongyu", "topic:  " + topic + "  message: " + message);
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                Log.e("gongyu", "IMqttDeliveryToken:  " + token);
+            }
+
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                Log.e("gongyu", "reconnect:  " + reconnect + "  serverURI: " + serverURI);
+            }
+        });
 
         conOpt = new MqttConnectOptions();
         // 清除缓存
@@ -149,19 +170,6 @@ public class MqttService extends Service {
     }
     }
 
-    /**
-     * 连接MQTT服务器
-     */
-    public void connect(IMqttCallBack starMQTTCallBack) {
-        this.starMQTTCallBack = starMQTTCallBack;
-        if (canDoConnect && !client.isConnected()) {
-            try {
-                client.connect(conOpt);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * 订阅主题
@@ -207,31 +215,31 @@ public class MqttService extends Service {
 
         @Override
         public void messageArrived(String topic, MqttMessage message) throws Exception {
-
             String msgContent = new String(message.getPayload());
+            Log.i(TAG, "messageArrived: " + msgContent);
             String detailLog = topic + ";qos:" + message.getQos() + ";retained:" + message.isRetained();
-            Log.e(TAG, "messageArrived:" + msgContent);
-            Log.e(TAG, detailLog);
-            if (starMQTTCallBack != null) {
-                starMQTTCallBack.messageArrived(topic, msgContent, message.getQos());
+            Log.i(TAG, detailLog);
+            for (IMqttCallBack mqttCallBack : mqttCallBacks) {
+                if (mqttCallBack != null) {
+                    mqttCallBack.messageArrived(topic, msgContent, message.getQos());
+                }
             }
         }
 
         @Override
         public void deliveryComplete(IMqttDeliveryToken arg0) {
-            if (starMQTTCallBack != null) {
-                starMQTTCallBack.deliveryComplete(arg0);
-            }
             Log.i(TAG, "deliveryComplete");
+            for (IMqttCallBack mqttCallBack : mqttCallBacks) {
+                mqttCallBack.deliveryComplete(arg0);
+            }
         }
 
         @Override
         public void connectionLost(Throwable arg0) {
-            if (starMQTTCallBack != null) {
-                starMQTTCallBack.connectionLost(arg0);
-            }
             Log.e(TAG, "connectionLost");
-            // 失去连接，重连
+            for (IMqttCallBack mqttCallBack : mqttCallBacks) {
+                mqttCallBack.connectionLost(arg0);
+            }
         }
     };
 }
