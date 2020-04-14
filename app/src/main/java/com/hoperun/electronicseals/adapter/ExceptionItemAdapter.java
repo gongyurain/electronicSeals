@@ -8,24 +8,27 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.hoperun.electronicseals.R;
+import com.hoperun.electronicseals.bean.DeviceList;
 import com.hoperun.electronicseals.bean.ExceptionItemNode;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExceptionItemAdapter extends BaseAdapter {
     private Context context;
-    private List<ExceptionItemNode> nodes = new ArrayList<>();
+    private List<DeviceList> nodes = new ArrayList<>();
     private LayoutInflater layoutInflater;
-
-    public ExceptionItemAdapter(Context context, List<ExceptionItemNode> nodes){
+    private SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public ExceptionItemAdapter(Context context, List<DeviceList> nodes){
         this.context = context;
-        if(nodes!=null)
+        if(nodes!=null) {
             this.nodes = nodes;
+        }
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public void updateViews(List<ExceptionItemNode> nodes){
+    public void updateViews(List<DeviceList> nodes){
         if(nodes==null) {
             nodes = new ArrayList<>();
         }
@@ -51,45 +54,39 @@ public class ExceptionItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder viewHolder;
-        ExceptionItemNode node = nodes.get(position);
+        DeviceList node = nodes.get(position);
         if(view==null){
             viewHolder = new ViewHolder();
             view = layoutInflater.inflate(R.layout.item_exception, null);
             viewHolder.sealIdTV = view.findViewById(R.id.box_seal_id_tv);
-            viewHolder.sealStatusTV = view.findViewById(R.id.box_seal_status_tv);
             viewHolder.sealTimeTV = view.findViewById(R.id.box_seal_time_tv);
-            viewHolder.sealPersonTV = view.findViewById(R.id.box_seal_person_tv);
-            viewHolder.sealAddrTV = view.findViewById(R.id.box_seal_addr_tv);
+            viewHolder.sealTypeTV = view.findViewById(R.id.box_seal_type_tv);
+            viewHolder.sealInfoTV = view.findViewById(R.id.box_seal_info_tv);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder)view.getTag();
         }
-        viewHolder.sealIdTV.setText(node.getSealId());
+        viewHolder.sealIdTV.setText(node.getSN());
 
-        if(node.getDealStatus()==1){
-            viewHolder.sealStatusTV.setText("已处理");
-            viewHolder.sealStatusTV.setTextColor(context.getResources().getColor(R.color.green_light));
-
-        }else {
-            viewHolder.sealStatusTV.setText("待处理");
-            viewHolder.sealStatusTV.setTextColor(context.getResources().getColor(R.color.redDark));
-
+        String timeText=format.format(node.getGMT());
+        viewHolder.sealTimeTV.setText(timeText);
+        if (node.getEV().equals(0)) {
+            viewHolder.sealTypeTV.setText("设备电量不足");
+        } else if(node.getEV().equals(1)) {
+            viewHolder.sealTypeTV.setText("设备被移动");
+        } else if(node.getEV().equals(2)) {
+            viewHolder.sealTypeTV.setText("设备加封");
+        } else if(node.getEV().equals(3)) {
+            viewHolder.sealTypeTV.setText("设备已解封");
         }
-        if(node.getCreateTime()!=null)
-            viewHolder.sealTimeTV.setText(node.getCreateTime().toString());
-        else
-            viewHolder.sealTimeTV.setText("");
-
-        viewHolder.sealPersonTV.setText(node.getSealOperName());
-        viewHolder.sealAddrTV.setText(node.getSealLoca());
+        viewHolder.sealInfoTV.setText((String)node.getDATA());
         return view;
     }
 
     class ViewHolder {
         TextView sealIdTV;
-        TextView sealStatusTV;
         TextView sealTimeTV;
-        TextView sealPersonTV;
-        TextView sealAddrTV;
+        TextView sealTypeTV;
+        TextView sealInfoTV;
     }
 }

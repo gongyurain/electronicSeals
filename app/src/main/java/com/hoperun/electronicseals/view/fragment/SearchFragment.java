@@ -1,23 +1,35 @@
 package com.hoperun.electronicseals.view.fragment;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ganxin.library.LoadDataLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hoperun.electronicseals.R;
 import com.hoperun.electronicseals.adapter.ExceptionItemAdapter;
-import com.hoperun.electronicseals.bean.ExceptionItemNode;
+import com.hoperun.electronicseals.bean.DeviceList;
 import com.hoperun.electronicseals.contract.BaseContract;
+import com.hoperun.electronicseals.service.IMqttCallBack;
 import com.hoperun.electronicseals.view.activity.CaptureActivity;
 import com.hoperun.electronicseals.view.activity.ExceptionInfoActivity;
+import com.hoperun.electronicseals.view.activity.MainActivity;
 import com.hoperun.electronicseals.wiget.pullableview.PullToRefreshLayout;
 import com.hoperun.electronicseals.wiget.pullableview.PullableListView;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PrimitiveIterator;
 
+import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -42,15 +54,29 @@ public class SearchFragment extends BaseFragment {
     PullableListView listView;
     @BindView(R.id.no_data_iv)
     ImageView noDataIV;
-
-    private PullRefreshListener pullRefreshListener;
+    @BindView(R.id.loadDataLayout)
+    LoadDataLayout loadDataLayout;
     private ExceptionItemAdapter sealItemAdapter;
-    private List<ExceptionItemNode> sealItemNodes = new ArrayList<>();
+    private List<DeviceList> sealItemNodes = new ArrayList<>();
     private int itemIndex = 1;
-    private int pageIndex = 0;
-    private int pageSize = 10;
     private String dealStatus;
-
+    private MainActivity activity;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            List<DeviceList> itemNodes = new ArrayList<>();
+            if (itemNodes.size() == 0) {
+                loadDataLayout.setStatus(LoadDataLayout.EMPTY);
+                return;
+            }
+            itemNodes.addAll((List<DeviceList>)msg.obj);
+            sealItemNodes.addAll(itemNodes);
+            if(sealItemAdapter!=null) {
+                sealItemAdapter.updateViews(sealItemNodes);
+            }
+            loadDataLayout.setStatus(LoadDataLayout.SUCCESS);
+        }
+    };
     @OnClick({R.id.item_status1_tv, R.id.item_status2_tv, R.id.item_status3_tv})
     public void itemStatusClick(View view){
 
@@ -61,6 +87,7 @@ public class SearchFragment extends BaseFragment {
                 itemIndex = 1;
                 dealStatus = null;
                 setStatusItemV(1);
+                getProblemItemsData();
                 break;
             case R.id.item_status2_tv:
                 if(itemIndex==2)
@@ -68,6 +95,7 @@ public class SearchFragment extends BaseFragment {
                 itemIndex = 2;
                 dealStatus = "0";
                 setStatusItemV(2);
+                loadDataLayout.setStatus(LoadDataLayout.EMPTY);
                 break;
             case R.id.item_status3_tv:
                 if(itemIndex==3)
@@ -75,10 +103,9 @@ public class SearchFragment extends BaseFragment {
                 itemIndex = 3;
                 dealStatus = "1";
                 setStatusItemV(3);
+                loadDataLayout.setStatus(LoadDataLayout.EMPTY);
                 break;
         }
-        pageIndex = 0;
-        getProblemItemsData();
     }
 
     @OnClick(R.id.add_iv)
@@ -99,51 +126,22 @@ public class SearchFragment extends BaseFragment {
 
     @Override
     public void initView() {
+        activity = (MainActivity) getActivity();
+        loadDataLayout.setEmptyImage(R.mipmap.icon_no_data);
         pullRL.isPullDown(false);
         pullRL.isPullUp(false);
-        pullRefreshListener = new PullRefreshListener();
-        pullRL.setOnRefreshListener(pullRefreshListener);
         sealItemAdapter = new ExceptionItemAdapter(getContext(), sealItemNodes);
         listView.setAdapter(sealItemAdapter);
         listView.setOnItemClickListener(sealItemClick);
-        pageIndex = 0;
         getProblemItemsData();
     }
 
-    private AdapterView.OnItemClickListener sealItemClick = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ExceptionItemNode node = sealItemNodes.get(position);
-            Intent intent = new Intent(getActivity(), ExceptionInfoActivity.class);
-            intent.putExtra("Id", node.getId());
-            startActivity(intent);
-        }
+    private AdapterView.OnItemClickListener sealItemClick = (parent, view, position, id) -> {
+        DeviceList node = sealItemNodes.get(position);
+        Intent intent = new Intent(getActivity(), ExceptionInfoActivity.class);
+        intent.putExtra("Id", node.getId());
+        startActivity(intent);
     };
-
-    private class PullRefreshListener implements PullToRefreshLayout.OnRefreshListener{
-        private PullToRefreshLayout refreshLayout, loadLayout;
-
-        @Override
-        public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
-            refreshLayout = pullToRefreshLayout;
-            pageIndex = 0;
-            getProblemItemsData();
-        }
-
-        @Override
-        public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
-            loadLayout = pullToRefreshLayout;
-            pageIndex++;
-            getProblemItemsData();
-        }
-
-        public void closeRefreshLoad(){
-            if(refreshLayout!=null)
-                refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-            if(loadLayout!=null)
-                loadLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-        }
-    }
 
     private void setStatusItemV(int index){
         status1TV.setTextColor(getResources().getColor(R.color.grayDarkX));
@@ -169,40 +167,28 @@ public class SearchFragment extends BaseFragment {
     }
 
     private void getProblemItemsData(){
-        List<ExceptionItemNode> itemNodes = new ArrayList<>();
-        for (int i = 0; i <= 10; i++) {
-            ExceptionItemNode exceptionItemNode = new ExceptionItemNode();
-            exceptionItemNode.setSealId("12342355464");
-            exceptionItemNode.setDealStatus(1);
-            exceptionItemNode.setCreateTime(1582119l);
-            exceptionItemNode.setSealOperName("gongyu");
-            exceptionItemNode.setSealLoca("北京市海淀区");
-            itemNodes.add(exceptionItemNode);
-        }
-        if(pullRefreshListener!=null)
-            pullRefreshListener.closeRefreshLoad();
-        if(pageIndex==0)
-            sealItemNodes = itemNodes;
-        else
-            sealItemNodes.addAll(itemNodes);
-        if(sealItemAdapter!=null)
-            sealItemAdapter.updateViews(sealItemNodes);
+        loadDataLayout.setStatus(LoadDataLayout.LOADING);
+        activity.getDeviceInfo(new IMqttCallBack() {
+            @Override
+            public void messageArrived(String topic, String message, int qos) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<ArrayList<DeviceList>>(){}.getType();
+                List<DeviceList> lists = gson.fromJson(message, type);
+                Message message1 = Message.obtain();
+                message1.obj = lists;
+                handler.sendMessage(message1);
+            }
 
-        if(itemNodes.size()>0)
-            pullRL.isPullDown(true);
-        else
-            pullRL.isPullDown(false);
+            @Override
+            public void connectionLost(Throwable arg0) {
+                loadDataLayout.setStatus(LoadDataLayout.ERROR);
+            }
 
-        if(itemNodes.size() < pageSize*(pageIndex+1))
-            pullRL.isPullUp(false);
-        else
-            pullRL.isPullUp(true);
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken arg0) {
 
-        if(sealItemNodes!=null&&sealItemNodes.size()!=0){
-            noDataIV.setVisibility(View.GONE);
-        }else {
-            noDataIV.setVisibility(View.VISIBLE);
-        }
+            }
+        });
     }
 
 
@@ -213,7 +199,6 @@ public class SearchFragment extends BaseFragment {
 
     @Override
     public BaseContract.BasePresenter createPresenter() {
-
         return null;
     }
 }

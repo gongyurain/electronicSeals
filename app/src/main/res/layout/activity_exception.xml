@@ -25,7 +25,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="电子封条"
+                    android:text="电子封条ID"
                     android:textSize="16sp"
                     android:textColor="@color/grayDark"/>
 
@@ -51,7 +51,7 @@
 
                     <TextView
                         style="@style/info_title_tv"
-                        android:text="时间" />
+                        android:text="发生时间" />
 
                     <TextView
                         android:id="@+id/box_seal_time_tv"
@@ -59,22 +59,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="right"
                         android:text="2020年3月28日 12:54"
-                        android:textColor="@color/grayDark"
-                        android:textSize="16sp" />
-                </LinearLayout>
-                <!-- 操作员 -->
-                <LinearLayout style="@style/item_line_ll_s">
-
-                    <TextView
-                        style="@style/info_title_tv"
-                        android:text="操作员" />
-
-                    <TextView
-                        android:id="@+id/box_seal_person_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:text="张三"
                         android:textColor="@color/grayDark"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -89,7 +73,7 @@
 
                     <TextView
                         style="@style/info_title_tv"
-                        android:text="申报地点" />
+                        android:text="发生地点" />
 
                     <TextView
                         android:id="@+id/box_seal_addr_tv"
@@ -146,8 +130,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text=""
-                        android:textColor="@color/grayDark"
+                        android:text="电量过低"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -185,7 +169,8 @@
 
                     <TextView
                         style="@style/info_title_tv"
-                        android:text="处理人" />
+                        android:layout_height="wrap_content"
+                        android:text="开具单位" />
 
                     <TextView
                         android:id="@+id/expt_person_tv"
@@ -205,7 +190,7 @@
 
                     <TextView
                         style="@style/info_title_tv"
-                        android:text="处理时间" />
+                        android:text="查封原因" />
 
                     <TextView
                         android:id="@+id/expt_time_tv"
@@ -216,18 +201,106 @@
                         android:textColor="@color/grayDark"
                         android:textSize="16sp" />
                 </LinearLayout>
-                <TextView
-                    style="@style/info_title_tv"
-                    android:layout_marginTop="10dp"
-                    android:text="处理反馈" />
-                <TextView
-                    android:id="@+id/expt_result"
+                <!-- 解封方法 -->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="暂无反馈"
-                    android:textColor="@color/grayDark"
-                    android:textSize="16sp" />
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        style="@style/info_title_tv"
+                        android:text="解封方法" />
+
+                    <TextView
+                        android:id="@+id/expt_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="无"
+                        android:textColor="@color/grayDark"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <!-- 解封时间 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        style="@style/info_title_tv"
+                        android:text="解封时间" />
+
+                    <TextView
+                        android:id="@+id/expt_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="无"
+                        android:textColor="@color/grayDark"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <!-- 被执行人信息 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        style="@style/info_title_tv"
+                        android:text="被执行人信息" />
+
+                    <TextView
+                        android:id="@+id/expt_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="无"
+                        android:textColor="@color/grayDark"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <!-- 被执行人信息 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        style="@style/info_title_tv"
+                        android:text="创建时间" />
+
+                    <TextView
+                        android:id="@+id/expt_create_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="无"
+                        android:textColor="@color/grayDark"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <!-- 被执行人信息 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        style="@style/info_title_tv"
+                        android:text="失效时间" />
+
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="无"
+                        android:textColor="@color/grayDark"
+                        android:textSize="16sp" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

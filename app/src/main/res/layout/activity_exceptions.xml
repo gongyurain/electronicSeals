@@ -84,40 +84,42 @@
                 android:background="@color/redDark"/>
         </FrameLayout>
     </LinearLayout>
-
-    <FrameLayout
+    <com.ganxin.library.LoadDataLayout
+        android:id="@+id/loadDataLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="2dp">
-        <LinearLayout
+        android:layout_height="match_parent">
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <com.hoperun.electronicseals.wiget.pullableview.PullToRefreshLayout
-                android:id="@+id/refreshview"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <include layout="@layout/item_pull_refresh_head" />
-                <com.hoperun.electronicseals.wiget.pullableview.PullableListView
-                    android:id="@+id/listview"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.hoperun.electronicseals.wiget.pullableview.PullToRefreshLayout
+                    android:id="@+id/refreshview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:divider="@null"
-                    android:listSelector="@color/transparent"
-                    android:scrollbars="none"/>
+                    android:layout_height="match_parent">
+                    <com.hoperun.electronicseals.wiget.pullableview.PullableListView
+                        android:id="@+id/listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:divider="@null"
+                        android:listSelector="@color/transparent"
+                        android:scrollbars="none"/>
 
-                <include layout="@layout/item_pull_load_more" />
-            </com.hoperun.electronicseals.wiget.pullableview.PullToRefreshLayout>
-        </LinearLayout>
+                </com.hoperun.electronicseals.wiget.pullableview.PullToRefreshLayout>
+            </LinearLayout>
 
-        <ImageView
-            android:id="@+id/no_data_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
-            android:visibility="visible"
-            android:layout_gravity="center_horizontal"
-            android:background="@mipmap/icon_no_data"/>
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/no_data_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="150dp"
+                android:background="@mipmap/icon_no_data"
+                android:visibility="visible" />
+        </FrameLayout>
+    </com.ganxin.library.LoadDataLayout>
 
 </LinearLayout>

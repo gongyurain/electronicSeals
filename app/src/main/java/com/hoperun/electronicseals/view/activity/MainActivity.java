@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -164,8 +165,10 @@ public class MainActivity extends BaseActivity {
 
 
     public void getDeviceInfo(IMqttCallBack mqttCallBack) {
-        mqttBinder.setMqttCallBack(mqttCallBack);
-        mqttBinder.getDeviceList();
+        if (mqttBinder != null) {
+            mqttBinder.setMqttCallBack(mqttCallBack);
+            mqttBinder.getDeviceList();
+        }
     }
 
     /**

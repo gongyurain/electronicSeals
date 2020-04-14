@@ -34,7 +34,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        handler.sendEmptyMessageDelayed(1, 3000);
+        handler.sendEmptyMessageDelayed(1, 2000);
     }
 
     @Override

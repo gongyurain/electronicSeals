@@ -19,14 +19,15 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:singleLine="true"
-                    android:text="电子箱封ID:"
-                    android:textSize="16sp"
-                    android:textColor="@color/grayDark"/>
+                    android:text="电子封条ID: "
+                    android:textColor="@color/grayDark"
+                    android:textSize="16sp" />
                 <TextView
                     android:id="@+id/box_seal_id_tv"
                     android:layout_width="wrap_content"
@@ -43,9 +44,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
+                android:visibility="gone"
                 android:text=""
-                android:textSize="14sp"
-                android:textColor="@color/green_light"/>
+                android:textColor="@color/green_light"
+                android:textSize="14sp" />
         </FrameLayout>
         <View
             android:layout_width="match_parent"
@@ -70,7 +72,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="时间"
+                        android:text="发生时间"
                         android:textSize="16sp"
                         android:textColor="@color/darkLight"/>
                     <TextView
@@ -88,14 +90,15 @@
                     android:layout_height="36dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="操作员"
-                        android:textSize="16sp"
-                        android:textColor="@color/darkLight"/>
+                        android:text="事件类型"
+                        android:textColor="@color/darkLight"
+                        android:textSize="16sp" />
                     <TextView
-                        android:id="@+id/box_seal_person_tv"
+                        android:id="@+id/box_seal_type_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -112,11 +115,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="申报地点"
+                        android:text="事件描述"
                         android:textSize="16sp"
                         android:textColor="@color/darkLight"/>
                     <TextView
-                        android:id="@+id/box_seal_addr_tv"
+                        android:id="@+id/box_seal_info_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -132,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:src="@mipmap/icon_right"/>
+                android:src="@mipmap/icon_right" />
 
         </FrameLayout>
     </LinearLayout>
