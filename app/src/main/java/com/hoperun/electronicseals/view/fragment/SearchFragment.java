@@ -13,7 +13,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hoperun.electronicseals.R;
 import com.hoperun.electronicseals.adapter.ExceptionItemAdapter;
-import com.hoperun.electronicseals.bean.DeviceList;
+import com.hoperun.electronicseals.bean.DeviceEventDetailResp;
+import com.hoperun.electronicseals.bean.DeviceEventResp;
 import com.hoperun.electronicseals.contract.BaseContract;
 import com.hoperun.electronicseals.service.IMqttCallBack;
 import com.hoperun.electronicseals.view.activity.CaptureActivity;
@@ -57,24 +58,34 @@ public class SearchFragment extends BaseFragment {
     @BindView(R.id.loadDataLayout)
     LoadDataLayout loadDataLayout;
     private ExceptionItemAdapter sealItemAdapter;
-    private List<DeviceList> sealItemNodes = new ArrayList<>();
+    private List<DeviceEventResp> sealItemNodes = new ArrayList<>();
     private int itemIndex = 1;
     private String dealStatus;
     private MainActivity activity;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            List<DeviceList> itemNodes = new ArrayList<>();
-            if (itemNodes.size() == 0) {
-                loadDataLayout.setStatus(LoadDataLayout.EMPTY);
-                return;
+            switch (msg.what) {
+                case 0 :
+                    List<DeviceEventResp> itemNodes = new ArrayList<>();
+                    itemNodes.addAll((List<DeviceEventResp>)msg.obj);
+                    if (itemNodes.size() == 0) {
+                        loadDataLayout.setStatus(LoadDataLayout.EMPTY);
+                        return;
+                    }
+                    sealItemNodes.addAll(itemNodes);
+                    if(sealItemAdapter!=null) {
+                        sealItemAdapter.updateViews(sealItemNodes);
+                    }
+                    loadDataLayout.setStatus(LoadDataLayout.SUCCESS);
+                    break;
+                case 1 :
+                    Intent intent = new Intent(getActivity(), ExceptionInfoActivity.class);
+                    intent.putExtra("info", (DeviceEventDetailResp)msg.obj);
+                    startActivity(intent);
+                    break;
             }
-            itemNodes.addAll((List<DeviceList>)msg.obj);
-            sealItemNodes.addAll(itemNodes);
-            if(sealItemAdapter!=null) {
-                sealItemAdapter.updateViews(sealItemNodes);
-            }
-            loadDataLayout.setStatus(LoadDataLayout.SUCCESS);
+
         }
     };
     @OnClick({R.id.item_status1_tv, R.id.item_status2_tv, R.id.item_status3_tv})
@@ -128,6 +139,7 @@ public class SearchFragment extends BaseFragment {
     public void initView() {
         activity = (MainActivity) getActivity();
         loadDataLayout.setEmptyImage(R.mipmap.icon_no_data);
+        loadDataLayout.setEmptyText("");
         pullRL.isPullDown(false);
         pullRL.isPullUp(false);
         sealItemAdapter = new ExceptionItemAdapter(getContext(), sealItemNodes);
@@ -137,10 +149,29 @@ public class SearchFragment extends BaseFragment {
     }
 
     private AdapterView.OnItemClickListener sealItemClick = (parent, view, position, id) -> {
-        DeviceList node = sealItemNodes.get(position);
-        Intent intent = new Intent(getActivity(), ExceptionInfoActivity.class);
-        intent.putExtra("Id", node.getId());
-        startActivity(intent);
+        DeviceEventResp node = sealItemNodes.get(position);
+        activity.getDeviceInfo(node.getId(), new IMqttCallBack() {
+            @Override
+            public void messageArrived(String topic, String message, int qos) {
+                Gson gson = new Gson();
+                //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
+                DeviceEventDetailResp deviceEventDetailResp = gson.fromJson(message, DeviceEventDetailResp.class);
+                Message message1 = Message.obtain();
+                message1.obj = deviceEventDetailResp;
+                message1.what = 1;
+                handler.sendMessage(message1);
+            }
+
+            @Override
+            public void connectionLost(Throwable arg0) {
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken arg0) {
+
+            }
+        });
     };
 
     private void setStatusItemV(int index){
@@ -168,14 +199,16 @@ public class SearchFragment extends BaseFragment {
 
     private void getProblemItemsData(){
         loadDataLayout.setStatus(LoadDataLayout.LOADING);
-        activity.getDeviceInfo(new IMqttCallBack() {
+        activity.getDeviceList(new IMqttCallBack() {
             @Override
             public void messageArrived(String topic, String message, int qos) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<ArrayList<DeviceList>>(){}.getType();
-                List<DeviceList> lists = gson.fromJson(message, type);
+                Type type = new TypeToken<ArrayList<DeviceEventResp>>(){}.getType();
+                //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
+                List<DeviceEventResp> lists = gson.fromJson(message, type);
                 Message message1 = Message.obtain();
                 message1.obj = lists;
+                message1.what = 0;
                 handler.sendMessage(message1);
             }
 
@@ -191,6 +224,14 @@ public class SearchFragment extends BaseFragment {
         });
     }
 
+    public void showContent(List<DeviceEventResp> list) {
+        if (list != null) {
+            Message message1 = Message.obtain();
+            message1.obj = list;
+            message1.what = 0;
+            handler.sendMessage(message1);
+        }
+    }
 
     @Override
     public int getLayoutViewId() {

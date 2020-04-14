@@ -123,28 +123,28 @@ public class MqttService extends Service {
         } catch (MqttException e) {
             e.printStackTrace();
         }
-
-        client.setCallback(new MqttCallbackExtended() {
-            @Override
-            public void connectionLost(Throwable cause) {
-                Log.e("gongyu", "Throwable:  " + cause);
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-                Log.e("gongyu", "topic:  " + topic + "  message: " + message);
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-                Log.e("gongyu", "IMqttDeliveryToken:  " + token);
-            }
-
-            @Override
-            public void connectComplete(boolean reconnect, String serverURI) {
-                Log.e("gongyu", "reconnect:  " + reconnect + "  serverURI: " + serverURI);
-            }
-        });
+        client.setCallback(mqttCallback);
+//        client.setCallback(new MqttCallbackExtended() {
+//            @Override
+//            public void connectionLost(Throwable cause) {
+//                Log.e("gongyu", "Throwable:  " + cause);
+//            }
+//
+//            @Override
+//            public void messageArrived(String topic, MqttMessage message) throws Exception {
+//                Log.e("gongyu", "topic:  " + topic + "  message: " + message);
+//            }
+//
+//            @Override
+//            public void deliveryComplete(IMqttDeliveryToken token) {
+//                Log.e("gongyu", "IMqttDeliveryToken:  " + token);
+//            }
+//
+//            @Override
+//            public void connectComplete(boolean reconnect, String serverURI) {
+//                Log.e("gongyu", "reconnect:  " + reconnect + "  serverURI: " + serverURI);
+//            }
+//        });
 
         conOpt = new MqttConnectOptions();
         // 清除缓存

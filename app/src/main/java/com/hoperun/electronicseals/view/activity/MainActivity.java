@@ -16,7 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hoperun.electronicseals.R;
+import com.hoperun.electronicseals.bean.DeviceEventResp;
 import com.hoperun.electronicseals.contract.BaseContract;
 import com.hoperun.electronicseals.service.IMqttCallBack;
 import com.hoperun.electronicseals.service.MqttService;
@@ -26,6 +29,7 @@ import com.hoperun.electronicseals.view.fragment.UserFragment;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,12 +66,16 @@ public class MainActivity extends BaseActivity {
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.e("gongyu", "sevice" + service.toString());
             mqttBinder = (MqttService.MqttBinder) service;
             mqttBinder.setMqttCallBack(new IMqttCallBack() {
                 @Override
                 public void messageArrived(String topic, String message, int qos) {
-                    Log.e("gongyu","messageArrived [" + topic + ", " + message + "]");
+
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<DeviceEventResp>>(){}.getType();
+                    //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
+                    List<DeviceEventResp> lists = gson.fromJson(message, type);
+                    ((SearchFragment)fragments.get(0)).showContent(lists);
                 }
 
                 @Override
@@ -164,10 +172,17 @@ public class MainActivity extends BaseActivity {
 
 
 
-    public void getDeviceInfo(IMqttCallBack mqttCallBack) {
+    public void getDeviceList(IMqttCallBack mqttCallBack) {
         if (mqttBinder != null) {
             mqttBinder.setMqttCallBack(mqttCallBack);
             mqttBinder.getDeviceList();
+        }
+    }
+
+    public void getDeviceInfo(int id, IMqttCallBack mqttCallBack) {
+        if (mqttBinder != null) {
+            mqttBinder.getDeviceInfo(id);
+            mqttBinder.setMqttCallBack(mqttCallBack);
         }
     }
 

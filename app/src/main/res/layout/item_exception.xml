@@ -94,11 +94,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="事件类型"
+                        android:text="发生地点"
                         android:textColor="@color/darkLight"
                         android:textSize="16sp" />
+
                     <TextView
-                        android:id="@+id/box_seal_type_tv"
+                        android:id="@+id/box_seal_addresss_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"

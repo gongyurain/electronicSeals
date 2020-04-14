@@ -92,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="2dp">
+            <include layout="@layout/item_pull_refresh_head" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,7 +108,7 @@
                         android:divider="@null"
                         android:listSelector="@color/transparent"
                         android:scrollbars="none"/>
-
+                    <include layout="@layout/item_pull_load_more" />
                 </com.hoperun.electronicseals.wiget.pullableview.PullToRefreshLayout>
             </LinearLayout>
 

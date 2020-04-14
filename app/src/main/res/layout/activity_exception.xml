@@ -118,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <TextView
@@ -173,7 +174,7 @@
                         android:text="开具单位" />
 
                     <TextView
-                        android:id="@+id/expt_person_tv"
+                        android:id="@+id/issuing_unit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -193,7 +194,7 @@
                         android:text="查封原因" />
 
                     <TextView
-                        android:id="@+id/expt_time_tv"
+                        android:id="@+id/sealing_up_reason"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -213,7 +214,7 @@
                         android:text="解封方法" />
 
                     <TextView
-                        android:id="@+id/expt_tv"
+                        android:id="@+id/unsealing_method"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -233,7 +234,7 @@
                         android:text="解封时间" />
 
                     <TextView
-                        android:id="@+id/expt_time"
+                        android:id="@+id/unsealing_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -253,7 +254,7 @@
                         android:text="被执行人信息" />
 
                     <TextView
-                        android:id="@+id/expt_info"
+                        android:id="@+id/executee_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -273,7 +274,7 @@
                         android:text="创建时间" />
 
                     <TextView
-                        android:id="@+id/expt_create_time"
+                        android:id="@+id/create_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -293,7 +294,7 @@
                         android:text="失效时间" />
 
                     <TextView
-                        android:id="@+id/time"
+                        android:id="@+id/failure_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
