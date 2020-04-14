@@ -69,13 +69,13 @@ public class ExceptionItemAdapter extends BaseAdapter {
 
         String timeText=format.format(node.getTime());
         viewHolder.sealTimeTV.setText(timeText);
-        if (node.getType().equals(0)) {
+        if (node.getType().equals("0")) {
             viewHolder.sealInfoTV.setText("设备电量不足");
-        } else if(node.getType().equals(1)) {
+        } else if(node.getType().equals("1")) {
             viewHolder.sealInfoTV.setText("设备被移动");
-        } else if(node.getType().equals(2)) {
+        } else if(node.getType().equals("2")) {
             viewHolder.sealInfoTV.setText("设备加封");
-        } else if(node.getType().equals(3)) {
+        } else if(node.getType().equals("3")) {
             viewHolder.sealInfoTV.setText("设备已解封");
         }
         viewHolder.sealAddressTV.setText(node.getAddr());

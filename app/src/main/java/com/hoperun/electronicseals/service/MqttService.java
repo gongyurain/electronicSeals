@@ -58,7 +58,7 @@ public class MqttService extends Service {
                     if (!isConnected()) {
                         return;
                     }
-                    String content = "00000000002";
+                    String content = String.valueOf(deviceId);
                     System.out.println("Publishing message: " + content);
                     MqttMessage message = new MqttMessage(content.getBytes());
                     message.setQos(2);
@@ -150,7 +150,7 @@ public class MqttService extends Service {
         // 清除缓存
         conOpt.setCleanSession(true);
         // 心跳包发送间隔，单位：秒
-        conOpt.setKeepAliveInterval(30*1000);
+        conOpt.setKeepAliveInterval(5);
 
         try {
             client.connect(conOpt);

@@ -67,17 +67,16 @@ public class SearchFragment extends BaseFragment {
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case 0 :
-                    List<DeviceEventResp> itemNodes = new ArrayList<>();
-                    itemNodes.addAll((List<DeviceEventResp>)msg.obj);
-                    if (itemNodes.size() == 0) {
+                    sealItemNodes.clear();
+                    sealItemNodes.addAll((List<DeviceEventResp>)msg.obj);
+                    if (sealItemNodes.size() == 0) {
                         loadDataLayout.setStatus(LoadDataLayout.EMPTY);
                         return;
                     }
-                    sealItemNodes.addAll(itemNodes);
+                    loadDataLayout.setStatus(LoadDataLayout.SUCCESS);
                     if(sealItemAdapter!=null) {
                         sealItemAdapter.updateViews(sealItemNodes);
                     }
-                    loadDataLayout.setStatus(LoadDataLayout.SUCCESS);
                     break;
                 case 1 :
                     Intent intent = new Intent(getActivity(), ExceptionInfoActivity.class);
@@ -150,28 +149,7 @@ public class SearchFragment extends BaseFragment {
 
     private AdapterView.OnItemClickListener sealItemClick = (parent, view, position, id) -> {
         DeviceEventResp node = sealItemNodes.get(position);
-        activity.getDeviceInfo(node.getId(), new IMqttCallBack() {
-            @Override
-            public void messageArrived(String topic, String message, int qos) {
-                Gson gson = new Gson();
-                //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
-                DeviceEventDetailResp deviceEventDetailResp = gson.fromJson(message, DeviceEventDetailResp.class);
-                Message message1 = Message.obtain();
-                message1.obj = deviceEventDetailResp;
-                message1.what = 1;
-                handler.sendMessage(message1);
-            }
-
-            @Override
-            public void connectionLost(Throwable arg0) {
-
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken arg0) {
-
-            }
-        });
+        activity.getDeviceInfo(node.getId());
     };
 
     private void setStatusItemV(int index){
@@ -199,36 +177,23 @@ public class SearchFragment extends BaseFragment {
 
     private void getProblemItemsData(){
         loadDataLayout.setStatus(LoadDataLayout.LOADING);
-        activity.getDeviceList(new IMqttCallBack() {
-            @Override
-            public void messageArrived(String topic, String message, int qos) {
-                Gson gson = new Gson();
-                Type type = new TypeToken<ArrayList<DeviceEventResp>>(){}.getType();
-                //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
-                List<DeviceEventResp> lists = gson.fromJson(message, type);
-                Message message1 = Message.obtain();
-                message1.obj = lists;
-                message1.what = 0;
-                handler.sendMessage(message1);
-            }
-
-            @Override
-            public void connectionLost(Throwable arg0) {
-                loadDataLayout.setStatus(LoadDataLayout.ERROR);
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken arg0) {
-
-            }
-        });
+        activity.getDeviceList();
     }
 
-    public void showContent(List<DeviceEventResp> list) {
+    public void showDeviceList(List<DeviceEventResp> list) {
         if (list != null) {
             Message message1 = Message.obtain();
             message1.obj = list;
             message1.what = 0;
+            handler.sendMessage(message1);
+        }
+    }
+
+    public void showDeviceInfo(DeviceEventDetailResp deviceEventDetailResp) {
+        if (deviceEventDetailResp != null) {
+            Message message1 = Message.obtain();
+            message1.obj = deviceEventDetailResp;
+            message1.what = 1;
             handler.sendMessage(message1);
         }
     }

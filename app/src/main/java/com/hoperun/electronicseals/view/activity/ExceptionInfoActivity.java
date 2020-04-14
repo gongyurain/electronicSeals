@@ -1,6 +1,7 @@
 package com.hoperun.electronicseals.view.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -61,6 +62,7 @@ public class ExceptionInfoActivity extends BaseActivity {
     @Override
     public void initView() {
         titleTv.setText("电子封条详情");
+        info = (DeviceEventDetailResp) getIntent().getSerializableExtra("info");
         if (info != null) {
             executeeInfo.setText(info.getTargetInfo());
             String tvInvalidTime = format.format(info.getInvalidTime());
@@ -76,6 +78,15 @@ public class ExceptionInfoActivity extends BaseActivity {
             String tvBoxSealTimeTv = format.format(info.getTime());
             boxSealTimeTv.setText(tvBoxSealTimeTv);
             boxStatusTv.setText(info.getSn());
+            if (info.getType().equals("0")) {
+                exptTypeTv.setText("设备电量不足");
+            } else if(info.getType().equals("1")) {
+                exptTypeTv.setText("设备被移动");
+            } else if(info.getType().equals("2")) {
+                exptTypeTv.setText("设备加封");
+            } else if(info.getType().equals("3")) {
+                exptTypeTv.setText("设备已解封");
+            }
         }
     }
 
@@ -92,8 +103,5 @@ public class ExceptionInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-        info = (DeviceEventDetailResp) getIntent().getSerializableExtra("info");
     }
 }

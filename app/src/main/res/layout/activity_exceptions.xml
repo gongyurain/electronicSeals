@@ -101,6 +101,7 @@
                     android:id="@+id/refreshview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+                    <include layout="@layout/item_pull_refresh_head" />
                     <com.hoperun.electronicseals.wiget.pullableview.PullableListView
                         android:id="@+id/listview"
                         android:layout_width="match_parent"
@@ -119,7 +120,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="150dp"
                 android:background="@mipmap/icon_no_data"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </FrameLayout>
     </com.ganxin.library.LoadDataLayout>
 

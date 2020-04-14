@@ -58,4 +58,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseCo
 
     public abstract BaseContract.BasePresenter initPresenter();
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

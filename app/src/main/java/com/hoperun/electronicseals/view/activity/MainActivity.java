@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hoperun.electronicseals.R;
+import com.hoperun.electronicseals.bean.DeviceEventDetailResp;
 import com.hoperun.electronicseals.bean.DeviceEventResp;
 import com.hoperun.electronicseals.contract.BaseContract;
 import com.hoperun.electronicseals.service.IMqttCallBack;
@@ -70,12 +71,20 @@ public class MainActivity extends BaseActivity {
             mqttBinder.setMqttCallBack(new IMqttCallBack() {
                 @Override
                 public void messageArrived(String topic, String message, int qos) {
-
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<DeviceEventResp>>(){}.getType();
-                    //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
-                    List<DeviceEventResp> lists = gson.fromJson(message, type);
-                    ((SearchFragment)fragments.get(0)).showContent(lists);
+                    if (topic.equals("/smartseal/s2c/eventlist")) {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ArrayList<DeviceEventResp>>(){}.getType();
+                        //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
+                        List<DeviceEventResp> lists = gson.fromJson(message, type);
+                        ((SearchFragment)fragments.get(0)).showDeviceList(lists);
+                    } else if (topic.equals("/smartseal/s2c/eventinfo")) {
+                        Gson gson = new Gson();
+                        //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
+                        DeviceEventDetailResp deviceEventDetailResp = gson.fromJson(message, DeviceEventDetailResp.class);
+                        ((SearchFragment)fragments.get(0)).showDeviceInfo(deviceEventDetailResp);
+                    } else if (topic.equals("/smartseal/s2c/newevent")) {
+                        mqttBinder.getDeviceList();
+                    }
                 }
 
                 @Override
@@ -88,7 +97,12 @@ public class MainActivity extends BaseActivity {
 
                 }
             });
-            mqttBinder.getDeviceList();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mqttBinder.getDeviceList();
+                }
+            },2000);
         }
 
         @Override
@@ -127,6 +141,11 @@ public class MainActivity extends BaseActivity {
         }
         transaction.commit();
         preFragment = fragment;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -172,17 +191,15 @@ public class MainActivity extends BaseActivity {
 
 
 
-    public void getDeviceList(IMqttCallBack mqttCallBack) {
+    public void getDeviceList() {
         if (mqttBinder != null) {
-            mqttBinder.setMqttCallBack(mqttCallBack);
             mqttBinder.getDeviceList();
         }
     }
 
-    public void getDeviceInfo(int id, IMqttCallBack mqttCallBack) {
+    public void getDeviceInfo(int id) {
         if (mqttBinder != null) {
             mqttBinder.getDeviceInfo(id);
-            mqttBinder.setMqttCallBack(mqttCallBack);
         }
     }
 
