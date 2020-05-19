@@ -37,8 +37,8 @@ import butterknife.OnClick;
 public class SearchFragment extends BaseFragment {
     @BindView(R.id.item_status1_tv)
     TextView status1TV;
-    @BindView(R.id.title_tv)
-    TextView titleTV;
+//    @BindView(R.id.title_tv)
+//    TextView titleTV;
     @BindView(R.id.item_status1_v)
     View status1V;
     @BindView(R.id.item_status2_tv)
@@ -118,11 +118,11 @@ public class SearchFragment extends BaseFragment {
         }
     }
 
-    @OnClick(R.id.add_iv)
-    public void addBtnClick(View view){
-        Intent intent = new Intent(getActivity(), CaptureActivity.class);
-        startActivity(intent);
-    }
+//    @OnClick(R.id.add_iv)
+//    public void addBtnClick(View view){
+//        Intent intent = new Intent(getActivity(), CaptureActivity.class);
+//        startActivity(intent);
+//    }
 
     @Override
     public void initListener() {

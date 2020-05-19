@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.hoperun.electronicseals.R;
+import com.hoperun.electronicseals.view.activity.BaseActivity;
+import com.hoperun.electronicseals.view.activity.CaptureActivity;
 import com.hoperun.electronicseals.view.activity.LoginActivity;
 import com.hoperun.electronicseals.view.activity.MainActivity;
 
@@ -278,10 +280,23 @@ public class QRCodeBaseActivity extends AppCompatActivity {
         if (!hasBackButton) {
             leftImageButton.setVisibility(View.INVISIBLE);
         } else {
+            leftImageButton.setVisibility(View.VISIBLE);
             leftImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     QRCodeBaseActivity.this.finish();
+                }
+            });
+        }
+        ImageButton rightButton = (ImageButton) actionBar.getCustomView().findViewById(R.id.action_bar_right_btn);
+        if (!hasSettingButton) {
+            rightButton.setVisibility(View.INVISIBLE);
+        } else {
+            rightButton.setVisibility(View.VISIBLE);
+            rightButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
             });
         }

@@ -9,6 +9,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -120,11 +122,13 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        buildCustomActionBar("电子封条",false,true);
         fragments = new ArrayList<Fragment>();
         fragments.add(new SearchFragment());
         fragments.add(new UserFragment());
         changefragment(0);
         radioGroup.check(R.id.search_tab);
+
     }
 
     protected void changefragment(int index) {
@@ -222,4 +226,6 @@ public class MainActivity extends BaseActivity {
         unbindService(serviceConnection);
         super.onDestroy();
     }
+
+
 }
