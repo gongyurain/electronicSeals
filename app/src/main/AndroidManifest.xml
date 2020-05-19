@@ -40,7 +40,8 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.CaptureActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".view.activity.ExceptionInfoActivity"
             android:launchMode="singleInstance" />

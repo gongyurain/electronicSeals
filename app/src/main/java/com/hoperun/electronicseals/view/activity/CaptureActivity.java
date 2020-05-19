@@ -122,7 +122,7 @@ public class CaptureActivity extends QRCodeBaseActivity implements SurfaceHolder
 	 * 初始化视图
 	 */
 	public void initView() {
-		//buildCustomActionBar("扫一扫", true, false);
+		buildCustomActionBar("扫一扫", true, false);
 		surfaceView = (SurfaceView) findViewById(R.id.preview_view);
 		//resultView = findViewById(R.id.result_view);
 		//scanTextView = (TextView) findViewById(R.id.mtextview_title);
@@ -581,22 +581,22 @@ public class CaptureActivity extends QRCodeBaseActivity implements SurfaceHolder
 		resetStatusView();
 	}
 
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_BACK: // 拦截返回键
-
-			restartPreviewAfterDelay(0L);
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		switch (keyCode) {
+//		case KeyEvent.KEYCODE_BACK: // 拦截返回键
+//
+//			restartPreviewAfterDelay(0L);
+//			return true;
+//		}
+//		return super.onKeyDown(keyCode, event);
+//	}
 
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()){
-//			case R.id.action_bar_left_btn:
-//				finish();
-//				break;
+			case R.id.action_bar_left_btn:
+				finish();
+				break;
 		}
 	}
 }
