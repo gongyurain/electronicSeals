@@ -23,6 +23,10 @@ import com.ljs.lovelytoast.LovelyToast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -122,29 +126,59 @@ public class LoginActivity extends BaseActivity implements LoginContract.LoginVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        initP();
+//        initP();
+        iniPermission();
     }
 
-    /**
-     * 申请权限
-     */
-    private void initP() {
+//    /**
+//     * 申请权限
+//     */
+//    private void initP() {
+//        if (android.os.Build.VERSION.SDK_INT >= 23) {
+//            if (ContextCompat.checkSelfPermission(LoginActivity.this,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                //请求权限
+//                ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA,},
+//                        1);
+//                //判断是否需要 向用户解释，为什么要申请该权限
+//                if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                    Toast.makeText(LoginActivity.this, "shouldShowRequestPermissionRationale", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }
+//
+//    }
+
+    private void iniPermission() {
         if (android.os.Build.VERSION.SDK_INT >= 23) {
+            List<String> permissionList = new ArrayList<>();
             if (ContextCompat.checkSelfPermission(LoginActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                //请求权限
-                ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA,},
-                        1);
-                //判断是否需要 向用户解释，为什么要申请该权限
-                if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    Toast.makeText(LoginActivity.this, "shouldShowRequestPermissionRationale", Toast.LENGTH_SHORT).show();
-                }
+                permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (ContextCompat.checkSelfPermission(LoginActivity.this,
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(Manifest.permission.CAMERA);
+            }
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.
+                    permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.
+                    permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(Manifest.permission.READ_PHONE_STATE);
+            }
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.
+                    permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (!permissionList.isEmpty()) {
+                String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+                ActivityCompat.requestPermissions(this, permissions, 1);
             }
         }
-
-
     }
 
     @OnClick(R.id.btn_login)
