@@ -14,6 +14,14 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 这个权限用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
     <application
         android:name=".ElectronicsealsApplication"
         android:allowBackup="true"
@@ -47,7 +55,6 @@
             android:name=".view.activity.ExceptionInfoActivity"
             android:launchMode="singleInstance" />
 
-        <service android:name=".service.MqttService" />
         <activity android:name=".view.activity.SealingPositionActivity">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
@@ -55,6 +62,23 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
+
+        <activity
+            android:name=".view.activity.DiscoverActivity"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="snBP5ojS9Tfmdg3fDqGQDckYt3ARVkux" />
+
+        <service android:name=".service.MqttService" />
+        <service android:name="com.inuker.bluetooth.library.BluetoothService" />
 
         <service
             android:name="com.baidu.location.f"

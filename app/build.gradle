@@ -9,7 +9,7 @@ android {
     }
     defaultConfig {
         applicationId "com.hoperun.electronicseals"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -54,5 +54,7 @@ dependencies {
     implementation 'com.ganxin.library:loaddatalayout:1.0.1'
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation files('libs/BaiduLBS_Android.jar')
-    implementation files('libs/component_common_sdk_1.2.0.jar')
+    implementation files('libs/component_common_sdk_1.2.0.jar') 
+    implementation 'com.example.zhouwei.library:library:1.0.0'
+    implementation 'com.inuker.bluetooth:library:1.4.0'
 }
