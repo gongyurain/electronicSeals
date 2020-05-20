@@ -220,7 +220,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     Log.d(TAG, "connect success, profile:" + profile);
                     profiles.add(profile);
                     Toast.makeText(DiscoverActivity.this, "设备已连接", Toast.LENGTH_SHORT).show();
-//                    BleService.getInstance().sycnData(profile);
+                    BleService.getInstance().sycnData(result, profile);
                 }
             }
         });
