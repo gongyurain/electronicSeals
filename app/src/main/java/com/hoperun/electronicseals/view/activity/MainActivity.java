@@ -40,21 +40,30 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
+
     @BindView(R.id.radiogroup)
     RadioGroup radioGroup;
 
     List<Fragment> fragments;
+
     private Fragment preFragment;
 
     private boolean isExit = false;
+
     private MqttService mqttService;
+
     private MqttService.MqttBinder mqttBinder;
+
+    protected List<DeviceEventResp> lists = new ArrayList<>();
+
+    private List<DeviceEventResp> blueList = new ArrayList<>();
+
     @Override
     public void initListener() {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.search_tab:
                         changefragment(0);
                         break;
@@ -75,15 +84,17 @@ public class MainActivity extends BaseActivity {
                 public void messageArrived(String topic, String message, int qos) {
                     if (topic.equals("/smartseal/s2c/eventlist")) {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<ArrayList<DeviceEventResp>>(){}.getType();
+                        Type type = new TypeToken<ArrayList<DeviceEventResp>>() {
+                        }.getType();
                         //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
-                        List<DeviceEventResp> lists = gson.fromJson(message, type);
-                        ((SearchFragment)fragments.get(0)).showDeviceList(lists);
+                        lists.clear();
+                        lists = gson.fromJson(message, type);
+                        ((SearchFragment) fragments.get(0)).showDeviceList(lists);
                     } else if (topic.equals("/smartseal/s2c/eventinfo")) {
                         Gson gson = new Gson();
                         //Message{id=0, topic='/smartseal/s2c/eventlist', body='[{"id":1,"sn":"864480040662891","time":1586795195000,"addr":"西安市莲湖区永安路91号","type":"1"}]'}
                         DeviceEventDetailResp deviceEventDetailResp = gson.fromJson(message, DeviceEventDetailResp.class);
-                        ((SearchFragment)fragments.get(0)).showDeviceInfo(deviceEventDetailResp);
+                        ((SearchFragment) fragments.get(0)).showDeviceInfo(deviceEventDetailResp);
                     } else if (topic.equals("/smartseal/s2c/newevent")) {
                         mqttBinder.getDeviceList();
                     }
@@ -104,7 +115,7 @@ public class MainActivity extends BaseActivity {
                 public void run() {
                     mqttBinder.getDeviceList();
                 }
-            },2000);
+            }, 2000);
         }
 
         @Override
@@ -122,7 +133,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        buildCustomActionBar("电子封条",false,true);
+        buildCustomActionBar("电子封条", false, true);
         fragments = new ArrayList<Fragment>();
         fragments.add(new SearchFragment());
         fragments.add(new UserFragment());
@@ -161,17 +172,18 @@ public class MainActivity extends BaseActivity {
     public BaseContract.BasePresenter initPresenter() {
         return null;
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             exit();
             return false;
-        }else {
+        } else {
             return super.onKeyDown(keyCode, event);
         }
     }
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -183,7 +195,7 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-    public void exit(){
+    public void exit() {
         if (!isExit) {
             isExit = true;
             Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
@@ -192,7 +204,6 @@ public class MainActivity extends BaseActivity {
             finish();
         }
     }
-
 
 
     public void getDeviceList() {

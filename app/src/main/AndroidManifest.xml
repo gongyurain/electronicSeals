@@ -32,7 +32,9 @@
             android:name=".view.activity.ExceptionInfoActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme" />
-        <activity android:name=".view.activity.SealingPositionActivity">
+        <activity android:name=".view.activity.SealingPositionActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
 

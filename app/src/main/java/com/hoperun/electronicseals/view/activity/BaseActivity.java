@@ -19,6 +19,8 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import androidx.appcompat.app.ActionBar;
 
+import java.io.Serializable;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -137,16 +139,18 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseCo
                     mCustomPopWindow.dissmiss();
                 }
                 String showContent = "";
+                Intent intent = null;
                 switch (v.getId()) {
                     case R.id.tv_ble:
                         DiscoverActivity.start(BaseActivity.this);
                         break;
                     case R.id.tv_map:
-                        showContent = "点击 Item菜单2";
-                        Toast.makeText(BaseActivity.this, showContent, Toast.LENGTH_SHORT).show();
+                        intent = new Intent(BaseActivity.this, SealingPositionActivity.class);
+                        intent.putExtra("info", (Serializable) ((MainActivity)BaseActivity.this).lists);
+                        startActivity(intent);
                         break;
                     case R.id.tv_qrcode:
-                        Intent intent = new Intent(BaseActivity.this, CaptureActivity.class);
+                        intent = new Intent(BaseActivity.this, CaptureActivity.class);
                         startActivity(intent);
                         break;
                 }

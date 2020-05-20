@@ -39,6 +39,6 @@
             android:id="@+id/tv_map"
             style="@style/list_pop_Style"
             android:drawableLeft="@mipmap/ditu"
-            android:text="地图" />
+            android:text="地图全揽" />
     </LinearLayout>
 </LinearLayout>

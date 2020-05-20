@@ -33,12 +33,14 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.hoperun.electronicseals.R;
 import com.hoperun.electronicseals.bean.DeviceEventResp;
+import com.hoperun.electronicseals.contract.BaseContract;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SealingPositionActivity extends Activity {
+public class SealingPositionActivity extends BaseActivity {
     private MapView mMapView = null;
 
     private BaiduMap mMap = null;
@@ -46,11 +48,10 @@ public class SealingPositionActivity extends Activity {
     private LocationClient mLocationClient = null;
 
     private SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_sealingposition);
 
         initView();
 
@@ -67,16 +68,25 @@ public class SealingPositionActivity extends Activity {
             //默认返回false
             @Override
             public boolean onMarkerClick(Marker marker) {
+                DeviceEventResp deviceEventResp = (DeviceEventResp) marker.getExtraInfo().getSerializable("deviceEventResp");
                 //用来构造InfoWindow的view
                 View mapInfoView = LayoutInflater.from(SealingPositionActivity.this).inflate(R.layout.item_exception, null);
                 TextView tsealIdTV = mapInfoView.findViewById(R.id.box_seal_id_tv);
                 TextView sealTimeTV = mapInfoView.findViewById(R.id.box_seal_time_tv);
                 TextView sealAddressTV = mapInfoView.findViewById(R.id.box_seal_addresss_tv);
                 TextView sealInfoTV = mapInfoView.findViewById(R.id.box_seal_info_tv);
-                tsealIdTV.setText("864480040662891");
-                sealTimeTV.setText(format.format(1586795195000l));
-                sealAddressTV.setText("莲湖区丰庆路188号");
-                sealInfoTV.setText("设备被移动");
+                tsealIdTV.setText(deviceEventResp.getSn());
+                sealTimeTV.setText(format.format(deviceEventResp.getTime()));
+                sealAddressTV.setText(deviceEventResp.getAddr());
+                if (deviceEventResp.getType().equals("0")) {
+                    sealInfoTV.setText("设备电量不足");
+                } else if(deviceEventResp.getType().equals("1")) {
+                    sealInfoTV.setText("设备被移动");
+                } else if(deviceEventResp.getType().equals("2")) {
+                    sealInfoTV.setText("设备加封");
+                } else if(deviceEventResp.getType().equals("3")) {
+                    sealInfoTV.setText("设备已解封");
+                }
                 // 构造InfoWindow
                 // point 描述的位置点TextView
                 // -100 InfoWindow相对于point在y轴的偏移量
@@ -88,6 +98,13 @@ public class SealingPositionActivity extends Activity {
             }
         });
     }
+
+    @Override
+    public void initView() {
+        mMapView = findViewById(R.id.bmapView);
+        buildCustomActionBar("地图全揽", false, true);
+    }
+
     private void addMark() {
 //        DeviceEventResp mapinfo = (DeviceEventResp) getIntent().getSerializableExtra("mapinfo");
         BitmapDescriptor bitmap = BitmapDescriptorFactory
@@ -105,6 +122,7 @@ public class SealingPositionActivity extends Activity {
         LatLng point8 = new LatLng(39.901493, 116.364686);
         LatLng point9 = new LatLng(29.674411, 91.040807);
         LatLng point10 = new LatLng(43.838416, 87.361348);
+        List<DeviceEventResp> lists = (List<DeviceEventResp>)getIntent().getExtras().get("info");
         final List<LatLng> latLngs = new ArrayList<>();
         latLngs.add(point1);
         latLngs.add(point2);
@@ -125,49 +143,18 @@ public class SealingPositionActivity extends Activity {
             MapStatusUpdate u = MapStatusUpdateFactory.newLatLngBounds(latlngBounds,mMapView.getWidth(),mMapView.getHeight());
             mMap.animateMapStatus(u);
         });
-
+        DeviceEventResp deviceEventResp = null;
+        Bundle bundle = new Bundle();
         // 创建OverlayOptions属性
-        OverlayOptions option1 = new MarkerOptions()
-                .position(point1)
-                .icon(bitmap);
-        OverlayOptions option2 = new MarkerOptions()
-                .position(point2)
-                .icon(bitmap);
-        OverlayOptions option3 = new MarkerOptions()
-                .position(point3)
-                .icon(bitmap);
-        OverlayOptions option4 = new MarkerOptions()
-                .position(point4)
-                .icon(bitmap);
-        OverlayOptions option5 = new MarkerOptions()
-                .position(point5)
-                .icon(bitmap);
-        OverlayOptions option6 = new MarkerOptions()
-                .position(point6)
-                .icon(bitmap);
-        OverlayOptions option7 = new MarkerOptions()
-                .position(point7)
-                .icon(bitmap);
-        OverlayOptions option8 = new MarkerOptions()
-                .position(point8)
-                .icon(bitmap);
-        OverlayOptions option9 = new MarkerOptions()
-                .position(point9)
-                .icon(bitmap);
-        OverlayOptions option10 = new MarkerOptions()
-                .position(point10)
-                .icon(bitmap);
-        // 将OverlayOptions添加到list
-        options.add(option1);
-        options.add(option2);
-        options.add(option3);
-        options.add(option4);
-        options.add(option5);
-        options.add(option6);
-        options.add(option7);
-        options.add(option8);
-        options.add(option9);
-        options.add(option10);
+        for (int i = 0; i < lists.size(); i++) {
+            deviceEventResp = lists.get(i);
+            bundle.clear();
+            bundle.putSerializable("deviceEventResp", deviceEventResp);
+            OverlayOptions option = new MarkerOptions()
+                    .position(latLngs.get((int)(Math.random()*10)))
+                    .icon(bitmap).extraInfo(bundle);
+            options.add(option);
+        }
         // 在地图上批量添加
         mMap.addOverlays(options);
     }
@@ -200,8 +187,14 @@ public class SealingPositionActivity extends Activity {
         mMap.setMyLocationEnabled(true);
     }
 
-    private void initView() {
-        mMapView = findViewById(R.id.bmapView);
+    @Override
+    public int getLayoutView() {
+        return R.layout.activity_sealingposition;
+    }
+
+    @Override
+    public BaseContract.BasePresenter initPresenter() {
+        return null;
     }
 
 
@@ -224,6 +217,16 @@ public class SealingPositionActivity extends Activity {
         mMapView.onDestroy();
         mMapView = null;
         super.onDestroy();
+    }
+
+    @Override
+    public void initListener() {
+
+    }
+
+    @Override
+    public void initData() {
+
     }
 
     class MyLocationListener extends BDAbstractLocationListener {

@@ -8,6 +8,7 @@ public class DeviceEventResp implements Serializable {
     private long time;
     private String addr;
     private String type;
+    private String acc;
 
     public int getId() {
         return id;
@@ -49,6 +50,14 @@ public class DeviceEventResp implements Serializable {
         this.type = type;
     }
 
+    public String getAcc() {
+        return acc;
+    }
+
+    public void setAcc(String acc) {
+        this.acc = acc;
+    }
+
     @Override
     public String toString() {
         return "DeviceEventResp{" +
@@ -57,6 +66,7 @@ public class DeviceEventResp implements Serializable {
                 ", time=" + time +
                 ", addr='" + addr + '\'' +
                 ", type='" + type + '\'' +
+                ", acc='" + acc + '\'' +
                 '}';
     }
 }
