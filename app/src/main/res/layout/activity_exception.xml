@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/mine_bg"
     android:orientation="vertical">
-    <include layout="@layout/item_title"/>
 
     <ScrollView
         android:layout_width="match_parent"

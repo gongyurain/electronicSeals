@@ -35,13 +35,13 @@
                 android:gravity="center"
                 android:text="全部"
                 android:textSize="16sp"
-                android:textColor="@color/redDark"/>
+                android:textColor="@color/themeColor"/>
             <View
                 android:id="@+id/item_status1_v"
                 android:layout_width="20dp"
                 android:layout_height="2dp"
                 android:layout_gravity="bottom|center_horizontal"
-                android:background="@color/redDark"/>
+                android:background="@color/themeColor"/>
         </FrameLayout>
         <FrameLayout
             android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                 android:layout_height="2dp"
                 android:visibility="invisible"
                 android:layout_gravity="bottom|center_horizontal"
-                android:background="@color/redDark"/>
+                android:background="@color/themeColor"/>
         </FrameLayout>
         <FrameLayout
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 android:layout_height="2dp"
                 android:visibility="invisible"
                 android:layout_gravity="bottom|center_horizontal"
-                android:background="@color/redDark"/>
+                android:background="@color/themeColor"/>
         </FrameLayout>
     </LinearLayout>
     <com.ganxin.library.LoadDataLayout

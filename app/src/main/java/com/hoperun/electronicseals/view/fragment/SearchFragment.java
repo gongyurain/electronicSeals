@@ -161,15 +161,15 @@ public class SearchFragment extends BaseFragment {
         status3V.setVisibility(View.INVISIBLE);
         switch (index){
             case 1:
-                status1TV.setTextColor(getResources().getColor(R.color.redDark));
+                status1TV.setTextColor(getResources().getColor(R.color.themeColor));
                 status1V.setVisibility(View.VISIBLE);
                 break;
             case 2:
-                status2TV.setTextColor(getResources().getColor(R.color.redDark));
+                status2TV.setTextColor(getResources().getColor(R.color.themeColor));
                 status2V.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                status3TV.setTextColor(getResources().getColor(R.color.redDark));
+                status3TV.setTextColor(getResources().getColor(R.color.themeColor));
                 status3V.setVisibility(View.VISIBLE);
                 break;
         }

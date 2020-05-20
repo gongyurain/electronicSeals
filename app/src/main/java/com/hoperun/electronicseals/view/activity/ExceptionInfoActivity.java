@@ -43,8 +43,6 @@ public class ExceptionInfoActivity extends BaseActivity {
     TextView failureTime;
 
     private DeviceEventDetailResp info;
-    @BindView(R.id.title_tv)
-    TextView titleTv;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
@@ -61,7 +59,8 @@ public class ExceptionInfoActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        titleTv.setText("电子封条详情");
+//        titleTv.setText("电子封条详情");
+        buildCustomActionBar("封条详情", true, false);
         info = (DeviceEventDetailResp) getIntent().getSerializableExtra("info");
         if (info != null) {
             executeeInfo.setText(info.getTargetInfo());
@@ -80,11 +79,11 @@ public class ExceptionInfoActivity extends BaseActivity {
             boxStatusTv.setText(info.getSn());
             if (info.getType().equals("0")) {
                 exptTypeTv.setText("设备电量不足");
-            } else if(info.getType().equals("1")) {
+            } else if (info.getType().equals("1")) {
                 exptTypeTv.setText("设备被移动");
-            } else if(info.getType().equals("2")) {
+            } else if (info.getType().equals("2")) {
                 exptTypeTv.setText("设备加封");
-            } else if(info.getType().equals("3")) {
+            } else if (info.getType().equals("3")) {
                 exptTypeTv.setText("设备已解封");
             }
         }
