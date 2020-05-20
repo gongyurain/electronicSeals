@@ -11,19 +11,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.hoperun.electronicseals.R;
-import com.hoperun.electronicseals.adapter.ListAdapter;
+import com.hoperun.electronicseals.adapter.DiscoverListAdapter;
+import com.hoperun.electronicseals.adapter.DiscoverListAdapter.Item;
 import com.hoperun.electronicseals.service.BleService;
 import com.inuker.bluetooth.library.BluetoothClient;
 import com.inuker.bluetooth.library.beacon.Beacon;
@@ -34,7 +29,6 @@ import com.inuker.bluetooth.library.search.SearchResult;
 import com.inuker.bluetooth.library.search.response.SearchResponse;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.inuker.bluetooth.library.Constants.REQUEST_SUCCESS;
@@ -49,9 +43,9 @@ public class DiscoverActivity extends AppCompatActivity {
 
     Button btScan;
 
-    List<SearchResult> list = new ArrayList<>();
+    List<Item> list = new ArrayList<>();
     ListView listView;
-    ListAdapter adapter;
+    DiscoverListAdapter adapter;
 
     BluetoothClient mClient;
     boolean scaning = false;
@@ -73,7 +67,7 @@ public class DiscoverActivity extends AppCompatActivity {
         btScan.setOnClickListener(v -> switchDiscover());
 
         listView = findViewById(R.id.list);
-        adapter = new ListAdapter(this.getLayoutInflater(), v -> connect((SearchResult) v.getTag()));
+        adapter = new DiscoverListAdapter(this.getLayoutInflater(), v -> connect((Item) v.getTag()));
         adapter.setData(list);
         listView.setAdapter(adapter);
 
@@ -172,58 +166,68 @@ public class DiscoverActivity extends AppCompatActivity {
                 Log.d(TAG, "onDeviceFounded name:" + result.getName() + ", addr:" + result.getAddress());
                 Beacon beacon = new Beacon(result.scanRecord);
                 Log.d(TAG, String.format("beacon for %s\n%s", result.getAddress(), beacon.toString()));
-
-                boolean found = false;
-                for(int i=0; i<list.size(); i++){
-                    if(list.get(i).getAddress().equalsIgnoreCase(result.getAddress())){
-                        list.set(i, result);
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found){
-                    list.add(result);
-                }
-                adapter.setData(list);
+                updateItem(new Item(result, null));
             }
 
             @Override
             public void onSearchStopped() {
                 Log.d(TAG, "onSearchStopped");
+                updateScan(false);
             }
 
             @Override
             public void onSearchCanceled() {
                 Log.d(TAG, "onSearchCanceled");
+                updateScan(false);
             }
         });
-        scaning = true;
-        btScan.setText("停止扫描");
+        updateScan(true);
+    }
+
+    private void updateScan(boolean scan){
+        scaning = scan;
+        btScan.setText(scaning ? "停止扫描" : "开始扫描");
     }
 
     private void stopDiscover() {
         Log.d(TAG, "startDiscover");
-        scaning = false;
         mClient.stopSearch();
-        btScan.setText("开始扫描");
+        updateScan(false);
     }
 
     ArrayList<BleGattProfile> profiles = new ArrayList<>();
 
-    void connect(SearchResult result) {
-        Log.d(TAG, "connect name:" + result.getName()+", addr:"+result.getAddress());
+    void connect(Item item) {
+        Log.d(TAG, "connect name:" + item.getName()+", addr:"+item.getAddress());
         stopDiscover();
-        mClient.connect(result.getAddress(), new BleConnectResponse() {
+        mClient.connect(item.getAddress(), new BleConnectResponse() {
             @Override
             public void onResponse(int code, BleGattProfile profile) {
                 if (code == REQUEST_SUCCESS) {
                     Log.d(TAG, "connect success, profile:" + profile);
                     profiles.add(profile);
+                    item.profile = profile;
+                    updateItem(item);
                     Toast.makeText(DiscoverActivity.this, "设备已连接", Toast.LENGTH_SHORT).show();
-                    BleService.getInstance().sycnData(result, profile);
+                    BleService.getInstance().readNotify(item.searchResult, item.profile);
                 }
             }
         });
+    }
+
+    private void updateItem(Item item){
+        boolean found = false;
+        for(int i=0; i<list.size(); i++){
+            if(list.get(i).getAddress().equalsIgnoreCase(item.getAddress())){
+                list.set(i, item);
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            list.add(item);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
