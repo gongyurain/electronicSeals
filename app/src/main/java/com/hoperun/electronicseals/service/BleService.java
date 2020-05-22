@@ -91,12 +91,12 @@ public class BleService {
         current = result;
         this.profile = profile;
         mClient.notify(
-//                result.getAddress(), getUUID("FFE1"), getUUID("C001"),
-                result.getAddress(), getUUID("180D"), getUUID("2A37"),
+                result.getAddress(), getUUID("E1FF"), getUUID("01C0"),
+//                result.getAddress(), getUUID("180D"), getUUID("2A37"), //heart rate
                 new BleNotifyResponse() {
                     @Override
                     public void onNotify(UUID service, UUID character, byte[] value) {
-                        Log.d(TAG, "onNotify value: " + new String(value));
+                        Log.d(TAG, "readNotify onNotify value: " + new String(value));
                         Toast.makeText(context, new String(value), Toast.LENGTH_SHORT).show();
                         DeviceEventResp event = new DeviceEventResp(); //TODO parse data to event
                         Log.d(TAG, "convert to event:" + event);
@@ -106,6 +106,7 @@ public class BleService {
 
                     @Override
                     public void onResponse(int code) {
+                        Log.d(TAG, "readNotify onResponse code: " + code);
                     }
                 });
     }

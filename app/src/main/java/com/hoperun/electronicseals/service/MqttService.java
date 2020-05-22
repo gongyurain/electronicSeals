@@ -31,11 +31,12 @@ public class MqttService extends Service {
     public class MqttBinder extends Binder implements IMqttRequest{
         @Override
         public void getDeviceList() {
-            Log.e("gongyu", "Publishing message: " );
+            Log.d("gongyu", "getDeviceList" );
             sExecutorService.execute(new Runnable() {
                 @Override
                 public void run() {
                     if (!isConnected()) {
+                        Log.d("gongyu", "mqtt disconnected, ignore getDeviceList" );
                         return;
                     }
                     String content = "00000000002";

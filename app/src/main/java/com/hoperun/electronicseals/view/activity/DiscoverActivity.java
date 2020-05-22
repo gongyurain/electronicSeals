@@ -152,7 +152,8 @@ public class DiscoverActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         SearchRequest request = new SearchRequest.Builder()
-                .searchBluetoothLeDevice(40 * 1000, 1)   // 先扫BLE设备3次，每次3s
+                .searchBluetoothLeDevice(30 * 1000)
+                .searchBluetoothClassicDevice(30*1000)
                 .build();
 
         mClient.search(request, new SearchResponse() {
@@ -184,7 +185,7 @@ public class DiscoverActivity extends AppCompatActivity {
         updateScan(true);
     }
 
-    private void updateScan(boolean scan){
+    private void updateScan(boolean scan) {
         scaning = scan;
         btScan.setText(scaning ? "停止扫描" : "开始扫描");
     }
@@ -198,7 +199,7 @@ public class DiscoverActivity extends AppCompatActivity {
     ArrayList<BleGattProfile> profiles = new ArrayList<>();
 
     void connect(Item item) {
-        Log.d(TAG, "connect name:" + item.getName()+", addr:"+item.getAddress());
+        Log.d(TAG, "connect name:" + item.getName() + ", addr:" + item.getAddress());
         stopDiscover();
         mClient.connect(item.getAddress(), new BleConnectResponse() {
             @Override
@@ -209,22 +210,26 @@ public class DiscoverActivity extends AppCompatActivity {
                     item.profile = profile;
                     updateItem(item);
                     Toast.makeText(DiscoverActivity.this, "设备已连接", Toast.LENGTH_SHORT).show();
-                    BleService.getInstance().readNotify(item.searchResult, item.profile);
+
+//                    BleService.getInstance().readNotify(item.searchResult, item.profile);
+                    BleNotifyActivity.start(DiscoverActivity.this, item.searchResult, item.profile);
+                } else {
+                    Toast.makeText(DiscoverActivity.this, "连接失败(" + code + ")", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void updateItem(Item item){
+    private void updateItem(Item item) {
         boolean found = false;
-        for(int i=0; i<list.size(); i++){
-            if(list.get(i).getAddress().equalsIgnoreCase(item.getAddress())){
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getAddress().equalsIgnoreCase(item.getAddress())) {
                 list.set(i, item);
                 found = true;
                 break;
             }
         }
-        if(!found){
+        if (!found) {
             list.add(item);
         }
         adapter.notifyDataSetChanged();

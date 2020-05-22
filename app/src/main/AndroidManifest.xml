@@ -50,6 +50,12 @@
             <!--            </intent-filter>-->
         </activity>
 
+        <activity
+                android:name=".view.activity.BleNotifyActivity"
+                android:launchMode="singleTop"
+                android:theme="@style/AppTheme">
+        </activity>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="snBP5ojS9Tfmdg3fDqGQDckYt3ARVkux" />
